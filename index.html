@@ -431,10 +431,15 @@
     <div class="nav-drawer-links">
       <a href="#features"><span class="ndot"></span>Features</a>
       <a href="#how-it-works"><span class="ndot"></span>How It Works</a>
+      <a href="#banks"><span class="ndot"></span>Adaptive Banks</a>
+      <a href="#widgets"><span class="ndot"></span>Widgets</a>
+      <a href="#salary-engine"><span class="ndot"></span>Salary Engine</a>
       <a href="#challenges"><span class="ndot"></span>Challenges</a>
-      <a href="#news"><span class="ndot"></span>Why It Matters</a>
       <a href="#services"><span class="ndot"></span>Services</a>
-      <a href="#tech"><span class="ndot"></span>Tech Stack</a>
+      <a href="#languages"><span class="ndot"></span>Languages</a>
+      <a href="#architecture"><span class="ndot"></span>Architecture</a>
+      <a href="#install"><span class="ndot"></span>Install</a>
+      <a href="#news"><span class="ndot"></span>Why It Matters</a>
     </div>
     <div class="nav-drawer-cta">
       <a href="https://github.com/yash-hackathon-email/edgepay/releases/download/EdgePay/EdgePay.apk" download>
@@ -458,10 +463,11 @@
 
       <div class="nav-pill" id="navLinks">
         <a href="#features">Features</a>
-        <a href="#how-it-works">How It Works</a>
+        <a href="#banks">Banks</a>
+        <a href="#widgets">Widgets</a>
         <a href="#challenges">Challenges</a>
-        <a href="#services">Services</a>
-        <a href="#tech">Tech Stack</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#install">Install</a>
       </div>
 
       <div class="nav-right">
@@ -864,6 +870,21 @@
         <h3>Transaction History</h3>
         <p>All USSD and wallet transactions are stored locally in encrypted, structured format. History includes merchant details, timestamps, transaction references, and status indicators — parsed from SMS confirmations. Private by default, no cloud sync needed.</p>
       </div>
+      <div class="fc ci" data-aos="fu" data-aos-delay="600">
+        <div class="fi" style="background:var(--indigo-l)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4361EE" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><line x1="1" y1="1" x2="23" y2="23"/></svg></div>
+        <h3>Masked Dashboard</h3>
+        <p>Balances are hidden by default (₹ ••••••) for user privacy. Every sensitive action — Check Balance, Send Money — is PIN-protected. PIN values are handled natively and zeroed in memory after use, aligned with OWASP MASVS-CRYPTO.</p>
+      </div>
+      <div class="fc cg" data-aos="fu" data-aos-delay="700">
+        <div class="fi" style="background:var(--green-l)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0CBB6A" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/><path d="M7 8h10M7 12h6"/></svg></div>
+        <h3>Triple Widget Ecosystem</h3>
+        <p>Three native Android widgets give you real-time financial data at a glance: Home Status (4×1), Savings Goal tracker (2×2), and Expense Percentage display (2×2). All powered entirely from local store — no cloud required.</p>
+      </div>
+      <div class="fc co" data-aos="fu" data-aos-delay="800">
+        <div class="fi" style="background:var(--orange-l)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F77F00" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <h3>Salary Deduction Engine</h3>
+        <p>Set a monthly salary or pocket money budget. Auto-deduction logic continuously scans confirmed transactions via SmsParser and updates your remaining balance in real-time via Zustand. Spending percentage calculated and surfaced on the widget instantly.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -990,7 +1011,7 @@
     <div class="sh">
       <span class="stag">Banking Services</span>
       <h2 class="stit">Full Bank Access <span class="gt">via USSD</span></h2>
-      <p class="ssub">Every service is routed through NPCI's National USSD Platform — the same infrastructure your bank uses for its own offline UPI feature.</p>
+      <p class="ssub">Every service is routed through NPCI's National USSD Platform — the same infrastructure your bank uses for its own offline UPI feature.</p><br><br>
       <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:-20px;margin-bottom:32px;justify-content:center;">
         <div style="display:inline-flex;align-items:flex-start;gap:10px;background:#e8f5e9;border:1.5px solid #66bb6a;border-radius:14px;padding:12px 18px;font-size:13px;color:#2e7d32;font-weight:600;font-family:var(--fh);max-width:420px;text-align:left;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2.5" style="flex-shrink:0;margin-top:1px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
@@ -1113,7 +1134,536 @@
       <div class="ti" data-aos="fu" data-aos-delay="200"><div class="te">📷</div><div class="tn2">Vision Camera</div><div class="tr">QR frame processor</div></div>
       <div class="ti" data-aos="fu" data-aos-delay="250"><div class="te">📡</div><div class="tn2">USSD Bridge</div><div class="tr">Payment dispatch</div></div>
       <div class="ti" data-aos="fu" data-aos-delay="300"><div class="te">💬</div><div class="tn2">SMS Parser</div><div class="tr">Confirmation engine</div></div>
-      <div class="ti" data-aos="fu" data-aos-delay="350"><div class="te">🔥</div><div class="tn2">Hermes Engine</div><div class="tr">Optimised JS runtime</div></div>
+      <div class="ti" data-aos="fu" data-aos-delay="350"><div class="te">🐻</div><div class="tn2">Zustand</div><div class="tr">Offline state sync</div></div>
+      <div class="ti" data-aos="fu" data-aos-delay="400"><div class="te">🧭</div><div class="tn2">React Navigation</div><div class="tr">Stack + transitions</div></div>
+      <div class="ti" data-aos="fu" data-aos-delay="450"><div class="te">🔥</div><div class="tn2">Hermes Engine</div><div class="tr">Optimised JS runtime</div></div>
+      <div class="ti" data-aos="fu" data-aos-delay="500"><div class="te">🏦</div><div class="tn2">NPCI NUUP</div><div class="tr">*99# banking infra</div></div>
+      <div class="ti" data-aos="fu" data-aos-delay="550"><div class="te">🔐</div><div class="tn2">OWASP MASVS</div><div class="tr">PIN security standard</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ADAPTIVE BANK LOGIC ══════════ -->
+<section style="padding:130px 0;background:#FFF;" id="banks">
+  <div class="ctr">
+    <div class="sh">
+      <span class="stag">Adaptive Bank Logic</span>
+      <h2 class="stit">Every Bank. <span class="gt">One App.</span></h2>
+      <p class="ssub">EdgePay doesn't use a generic adapter. It ships hand-tuned bank-specific logic — separate protocol paths for different banks, with a multi-pattern regex brain that works across 50+ Indian bank SMS formats.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:48px;">
+
+      <!-- SBI Card -->
+      <div style="background:linear-gradient(135deg,#1a237e,#283593);border-radius:var(--r-xl);padding:36px;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(26,35,126,0.25);" data-aos="fr">
+        <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.05);"></div>
+        <div style="position:absolute;bottom:-30px;left:-20px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,0.03);"></div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;position:relative;z-index:2;">
+          <div style="width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:24px;">🏦</div>
+          <div>
+            <div style="font-family:var(--fh);font-size:20px;font-weight:800;color:#fff;letter-spacing:-.3px;">SBI Integration</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.55);margin-top:2px;">Custom SMS-Based Balance Fetch</div>
+          </div>
+        </div>
+        <p style="font-size:14px;color:rgba(255,255,255,0.7);line-height:1.75;margin-bottom:20px;position:relative;z-index:2;">EdgePay sends a <code style="background:rgba(255,255,255,.1);color:#fbbf24;padding:2px 7px;border-radius:5px;font-size:12px">BAL</code> request to SBI's missed-call number. The incoming <code style="background:rgba(255,255,255,.1);color:#fbbf24;padding:2px 7px;border-radius:5px;font-size:12px">AD-SBIPSG-S</code> response is parsed in real-time for live balance accuracy.</p>
+        <div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:16px;font-family:'Courier New',monospace;font-size:12px;line-height:1.9;position:relative;z-index:2;">
+          <div style="color:rgba(255,255,255,0.35);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;font-family:var(--fh);">SBI SMS Path</div>
+          <div style="color:#7dd3fc;">Send SMS: "BAL"</div>
+          <div style="color:rgba(255,255,255,0.4);padding-left:12px;">→ to: 09223766666</div>
+          <div style="color:#7dd3fc;margin-top:4px;">Await: AD-SBIPSG-S</div>
+          <div style="color:#a3e635;padding-left:12px;">→ SmsParser extracts balance</div>
+          <div style="color:#4ade80;margin-top:6px;">✓ Balance fetched — 0 bytes data</div>
+        </div>
+      </div>
+
+      <!-- HDFC + Others Card -->
+      <div style="background:linear-gradient(135deg,#004d40,#00695c);border-radius:var(--r-xl);padding:36px;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(0,77,64,0.25);" data-aos="fl">
+        <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.05);"></div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;position:relative;z-index:2;">
+          <div style="width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:24px;">🏛️</div>
+          <div>
+            <div style="font-family:var(--fh);font-size:20px;font-weight:800;color:#fff;letter-spacing:-.3px;">HDFC & All Others</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.55);margin-top:2px;">Standard USSD Gateway</div>
+          </div>
+        </div>
+        <p style="font-size:14px;color:rgba(255,255,255,0.7);line-height:1.75;margin-bottom:20px;position:relative;z-index:2;">HDFC and all other supported banks route through the universal NPCI USSD Gateway — the same infrastructure used natively by every major bank's own UPI feature.</p>
+        <div style="background:rgba(0,0,0,0.3);border-radius:12px;padding:16px;font-family:'Courier New',monospace;font-size:12px;line-height:1.9;position:relative;z-index:2;">
+          <div style="color:rgba(255,255,255,0.35);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;font-family:var(--fh);">USSD Gateway Path</div>
+          <div style="color:#7dd3fc;">Dial: *99*3#</div>
+          <div style="color:rgba(255,255,255,0.4);padding-left:12px;">→ NPCI USSD Gateway</div>
+          <div style="color:#7dd3fc;margin-top:4px;">HDFC, PNB, Axis, BoB...</div>
+          <div style="color:#a3e635;padding-left:12px;">→ Balance returned via USSD</div>
+          <div style="color:#4ade80;margin-top:6px;">✓ Works on all carriers</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Regex Parser Brain -->
+    <div style="background:linear-gradient(135deg,#0D0A2E,#1a1040);border-radius:var(--r-xl);padding:40px;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(13,10,46,0.2);" data-aos="fu">
+      <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(67,97,238,0.06) 1px,transparent 1px);background-size:24px 24px;"></div>
+      <div style="position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;">
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(247,127,0,0.15);border:1px solid rgba(247,127,0,0.3);padding:6px 14px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#F77F00;margin-bottom:18px;font-family:var(--fh);">🧠 The Regex Brain</div>
+          <h3 style="font-family:var(--fh);font-size:clamp(22px,3vw,32px);font-weight:800;color:#fff;margin-bottom:16px;letter-spacing:-.5px;">SmsParser.ts — Multi-Bank Intelligence</h3>
+          <p style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:24px;">India has 50+ banks, each formatting its debit confirmation SMS differently — varying terminology, date formats, merchant name placements, and encoding quirks. EdgePay's parser handles all of them.</p>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.05);border-radius:12px;padding:14px;">
+              <span style="font-size:18px;">📋</span><div><div style="font-family:var(--fh);font-weight:700;color:#fff;font-size:13px;">12+ Regex Templates</div><div style="font-size:12px;color:rgba(255,255,255,0.5);">Ranked priority queue, bank-specific patterns</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.05);border-radius:12px;padding:14px;">
+              <span style="font-size:18px;">🔄</span><div><div style="font-family:var(--fh);font-weight:700;color:#fff;font-size:13px;">Dual-Channel Strategy</div><div style="font-size:12px;color:rgba(255,255,255,0.5);">BroadcastReceiver + inbox polling fallback</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.05);border-radius:12px;padding:14px;">
+              <span style="font-size:18px;">📦</span><div><div style="font-family:var(--fh);font-weight:700;color:#fff;font-size:13px;">Normalised Output Struct</div><div style="font-size:12px;color:rgba(255,255,255,0.5);">{amount, bank, txnRef, timestamp} — always consistent</div></div>
+            </div>
+          </div>
+        </div>
+        <div style="background:rgba(0,0,0,0.4);border-radius:16px;padding:20px;font-family:'Courier New',monospace;font-size:11.5px;line-height:1.9;">
+          <div style="color:rgba(255,255,255,0.3);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-family:var(--fh);">SmsParser.ts — Pattern Matching</div>
+          <div style="color:#7dd3fc;">// SBI pattern</div>
+          <div style="color:#a3e635;">/INR\s?([\d,]+\.?\d*)\s+debited/i</div>
+          <div style="color:rgba(255,255,255,0.25);margin:6px 0;">──────────────────────────</div>
+          <div style="color:#7dd3fc;">// HDFC pattern</div>
+          <div style="color:#a3e635;">/Rs\.?\s?([\d,]+\.?\d*)\s+debited/i</div>
+          <div style="color:rgba(255,255,255,0.25);margin:6px 0;">──────────────────────────</div>
+          <div style="color:#7dd3fc;">// Generic UPI alert</div>
+          <div style="color:#a3e635;">/UPI\/(\w+)\s+Ref:\s*(\w+)/i</div>
+          <div style="color:rgba(255,255,255,0.25);margin:8px 0;">──────────────────────────</div>
+          <div style="color:#fbbf24;">→ Output: {</div>
+          <div style="padding-left:16px;color:#e0e0f0;">amount: 200.00,</div>
+          <div style="padding-left:16px;color:#e0e0f0;">bank: "SBI",</div>
+          <div style="padding-left:16px;color:#e0e0f0;">txnRef: "SBI240326001234",</div>
+          <div style="padding-left:16px;color:#e0e0f0;">timestamp: "2024-03-26T14:22:00"</div>
+          <div style="color:#fbbf24;">}</div>
+          <div style="color:#4ade80;margin-top:8px;">✓ Parsed in &lt;5ms</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ TRIPLE WIDGET ECOSYSTEM ══════════ -->
+<section style="padding:130px 0;background:var(--bg-s);" id="widgets">
+  <div class="ctr">
+    <div class="sh">
+      <span class="stag">Widget Ecosystem</span>
+      <h2 class="stit">Always-On <span class="ot">Home Screen</span></h2>
+      <p class="ssub">EdgePay ships three native Android widgets — so your financial snapshot is a glance away, even when the app is closed. No internet. No refresh delay. Purely local.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+
+      <!-- Widget 1: Home Status -->
+      <div style="background:#FFF;border:1px solid var(--border);border-radius:var(--r-xl);padding:36px;text-align:center;box-shadow:var(--sh-card);transition:all .3s;position:relative;overflow:hidden;" data-aos="fu" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 24px 48px rgba(58,12,163,.1)'" onmouseout="this.style.transform='';this.style.boxShadow='var(--sh-card)'">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad);"></div>
+        <div style="width:64px;height:64px;border-radius:20px;background:var(--indigo-l);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px;">📊</div>
+        <h3 style="font-family:var(--fh);font-size:18px;font-weight:800;color:var(--text-1);margin-bottom:10px;">Home Status Widget</h3>
+        <p style="font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:20px;">Real-time payment status on your home screen. Shows last transaction, balance (masked), and current offline/online mode — updating from local store.</p>
+        <!-- Widget preview -->
+        <div style="background:linear-gradient(135deg,#3A0CA3,#4361EE);border-radius:16px;padding:16px;text-align:left;">
+          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;font-family:var(--fh);">EdgePay</div>
+          <div style="font-size:20px;font-weight:800;color:#fff;font-family:var(--fh);letter-spacing:-0.5px;">₹ ••••••</div>
+          <div style="display:flex;align-items:center;gap:5px;margin-top:6px;">
+            <div style="width:6px;height:6px;border-radius:50%;background:#4ade80;"></div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.6);font-weight:600;">OFFLINE ACTIVE</div>
+          </div>
+          <div style="margin-top:10px;padding:8px;background:rgba(255,255,255,0.08);border-radius:8px;font-size:10px;color:rgba(255,255,255,0.7);">Last: ₹200 sent · 1h ago</div>
+        </div>
+        <div style="margin-top:16px;display:inline-block;background:var(--indigo-l);color:var(--indigo-m);padding:5px 14px;border-radius:8px;font-size:11px;font-weight:800;font-family:var(--fh);border:1px solid var(--indigo-b);">4×1 Android Widget</div>
+      </div>
+
+      <!-- Widget 2: Savings Goal -->
+      <div style="background:#FFF;border:1px solid var(--border);border-radius:var(--r-xl);padding:36px;text-align:center;box-shadow:var(--sh-card);transition:all .3s;position:relative;overflow:hidden;" data-aos="fu" data-aos-delay="150" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 24px 48px rgba(12,187,106,.1)'" onmouseout="this.style.transform='';this.style.boxShadow='var(--sh-card)'">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#0CBB6A,#00F5A0);"></div>
+        <div style="width:64px;height:64px;border-radius:20px;background:var(--green-l);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px;">🎯</div>
+        <h3 style="font-family:var(--fh);font-size:18px;font-weight:800;color:var(--text-1);margin-bottom:10px;">Savings Goal Widget</h3>
+        <p style="font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:20px;">Track your savings progress at a glance. Set a target, and watch the progress bar update every time you save. No cloud sync needed — all local.</p>
+        <!-- Widget preview -->
+        <div style="background:linear-gradient(135deg,#0CBB6A,#007a44);border-radius:16px;padding:16px;text-align:left;">
+          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;font-family:var(--fh);">Savings Goal</div>
+          <div style="font-size:18px;font-weight:800;color:#fff;font-family:var(--fh);letter-spacing:-0.3px;">₹4,200 / ₹10,000</div>
+          <div style="background:rgba(255,255,255,0.2);border-radius:100px;height:8px;margin:10px 0;overflow:hidden;">
+            <div style="width:42%;height:100%;background:#fff;border-radius:100px;"></div>
+          </div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.7);">42% reached · Keep going! 🚀</div>
+        </div>
+        <div style="margin-top:16px;display:inline-block;background:var(--green-l);color:var(--green);padding:5px 14px;border-radius:8px;font-size:11px;font-weight:800;font-family:var(--fh);border:1px solid var(--green-b);">2×2 Android Widget</div>
+      </div>
+
+      <!-- Widget 3: Expense Tracker -->
+      <div style="background:#FFF;border:1px solid var(--border);border-radius:var(--r-xl);padding:36px;text-align:center;box-shadow:var(--sh-card);transition:all .3s;position:relative;overflow:hidden;" data-aos="fu" data-aos-delay="300" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 24px 48px rgba(247,127,0,.1)'" onmouseout="this.style.transform='';this.style.boxShadow='var(--sh-card)'">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad-o);"></div>
+        <div style="width:64px;height:64px;border-radius:20px;background:var(--orange-l);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px;">💸</div>
+        <h3 style="font-family:var(--fh);font-size:18px;font-weight:800;color:var(--text-1);margin-bottom:10px;">Expense Tracker Widget</h3>
+        <p style="font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:20px;">Large, bold percentage display of your monthly spending vs salary/pocket money budget. Auto-deduction scans transaction history and updates the display automatically.</p>
+        <!-- Widget preview -->
+        <div style="background:linear-gradient(135deg,#F77F00,#E63946);border-radius:16px;padding:16px;text-align:left;">
+          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;font-family:var(--fh);">Monthly Spend</div>
+          <div style="font-size:36px;font-weight:800;color:#fff;font-family:var(--fh);letter-spacing:-2px;line-height:1;">67%</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.7);margin-top:4px;">₹6,700 of ₹10,000 used</div>
+          <div style="background:rgba(255,255,255,0.2);border-radius:100px;height:5px;margin-top:10px;overflow:hidden;">
+            <div style="width:67%;height:100%;background:#fff;border-radius:100px;"></div>
+          </div>
+        </div>
+        <div style="margin-top:16px;display:inline-block;background:var(--orange-l);color:var(--orange);padding:5px 14px;border-radius:8px;font-size:11px;font-weight:800;font-family:var(--fh);border:1px solid var(--orange-b);">2×2 Android Widget</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SALARY DEDUCTION ENGINE ══════════ -->
+<section style="padding:130px 0;background:#FFF;" id="salary-engine">
+  <div class="ctr">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;">
+      <div data-aos="fr">
+        <span class="stag">Salary Deduction Engine</span>
+        <h2 class="stit" style="text-align:left;margin-bottom:16px;">Smart Budget <span class="ot">Auto-Tracking</span></h2>
+        <p style="font-size:16px;color:var(--text-2);line-height:1.8;margin-bottom:32px;">Set your monthly salary or pocket money budget once. EdgePay's auto-deduction logic continuously scans your transaction history and maintains a live view of what's left — zero manual entry.</p>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;align-items:flex-start;gap:16px;padding:20px;background:var(--bg-s);border:1px solid var(--border);border-radius:var(--r-lg);">
+            <div style="width:42px;height:42px;border-radius:13px;background:var(--indigo-l);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">💼</div>
+            <div>
+              <div style="font-family:var(--fh);font-weight:800;color:var(--text-1);font-size:15px;margin-bottom:5px;">Set Monthly Budget</div>
+              <div style="font-size:13px;color:var(--text-2);line-height:1.6;">Enter your salary, stipend, or pocket money. EdgePay uses this as the baseline for all spending calculations.</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:16px;padding:20px;background:var(--bg-s);border:1px solid var(--border);border-radius:var(--r-lg);">
+            <div style="width:42px;height:42px;border-radius:13px;background:var(--orange-l);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🔄</div>
+            <div>
+              <div style="font-family:var(--fh);font-weight:800;color:var(--text-1);font-size:15px;margin-bottom:5px;">Auto-Deduction Scan</div>
+              <div style="font-size:13px;color:var(--text-2);line-height:1.6;">Every confirmed transaction is scanned by the SMS parser and automatically deducted from your remaining balance — powered by Zustand state sync.</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:16px;padding:20px;background:var(--bg-s);border:1px solid var(--border);border-radius:var(--r-lg);">
+            <div style="width:42px;height:42px;border-radius:13px;background:var(--green-l);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">📈</div>
+            <div>
+              <div style="font-family:var(--fh);font-weight:800;color:var(--text-1);font-size:15px;margin-bottom:5px;">Real-Time Spend %</div>
+              <div style="font-size:13px;color:var(--text-2);line-height:1.6;">Live spending percentage updates on the widget and dashboard — large, bold, impossible to ignore. Know before you overspend.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Right: Live dashboard preview -->
+      <div data-aos="fl">
+        <div style="background:#0a0818;border-radius:28px;padding:28px;box-shadow:0 32px 80px rgba(13,10,46,0.2);">
+          <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:20px;font-family:var(--fh);">Expense Dashboard</div>
+          <!-- Salary input -->
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;margin-bottom:12px;">
+            <div style="font-size:10px;color:rgba(255,255,255,0.35);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Monthly Salary</div>
+            <div style="font-family:var(--fh);font-size:28px;font-weight:800;color:#fff;letter-spacing:-1px;">₹10,000</div>
+          </div>
+          <!-- Spend bar -->
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+              <span style="font-size:11px;color:rgba(255,255,255,0.4);font-weight:600;">Spent this month</span>
+              <span style="font-family:var(--fh);font-weight:800;font-size:13px;color:#F77F00;">67%</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:100px;height:10px;overflow:hidden;">
+              <div style="width:67%;height:100%;background:linear-gradient(90deg,#F77F00,#E63946);border-radius:100px;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px;">
+              <span style="font-size:11px;color:rgba(255,255,255,0.3);">₹6,700 used</span>
+              <span style="font-size:11px;color:#0CBB6A;font-weight:700;">₹3,300 left</span>
+            </div>
+          </div>
+          <!-- Recent deductions -->
+          <div style="font-size:10px;color:rgba(255,255,255,0.25);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;font-family:var(--fh);">Auto-Deducted</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.04);border-radius:10px;padding:10px 12px;">
+              <div style="font-size:12px;color:rgba(255,255,255,0.7);">🍔 Dinner Split</div>
+              <div style="font-size:12px;font-weight:800;font-family:var(--fh);color:#ff6b6b;">−₹200</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.04);border-radius:10px;padding:10px 12px;">
+              <div style="font-size:12px;color:rgba(255,255,255,0.7);">🛒 Grocery</div>
+              <div style="font-size:12px;font-weight:800;font-family:var(--fh);color:#ff6b6b;">−₹850</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.04);border-radius:10px;padding:10px 12px;">
+              <div style="font-size:12px;color:rgba(255,255,255,0.7);">🚌 Travel</div>
+              <div style="font-size:12px;font-weight:800;font-family:var(--fh);color:#ff6b6b;">−₹320</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ MULTI-LANGUAGE ══════════ -->
+<section style="padding:130px 0;background:linear-gradient(135deg,#0D0A2E 0%,#1a1040 50%,#0e0c1c 100%);position:relative;overflow:hidden;" id="languages">
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;"></div>
+  <div style="position:absolute;top:-80px;right:-80px;width:400px;height:400px;background:rgba(67,97,238,0.07);border-radius:50%;filter:blur(80px);pointer-events:none;"></div>
+  <div class="ctr" style="position:relative;z-index:2;">
+    <div class="sh">
+      <span class="stag" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);color:#fff;">🌍 Multi-Language Support</span>
+      <h2 class="stit" style="color:#fff;">India Speaks <span class="gt">Many Languages</span></h2>
+      <p class="ssub" style="color:rgba(255,255,255,0.65);">EdgePay is fully localized in 8 Indian languages — including right-to-left script support for Urdu. A dedicated Language Selector gives every user a personalized, native experience.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px;">
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-lg);padding:24px;text-align:center;transition:all .3s;" data-aos="fu" onmouseover="this.style.background='rgba(67,97,238,0.15)';this.style.borderColor='rgba(67,97,238,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,255,255,0.1)'">
+        <div style="font-size:32px;margin-bottom:12px;">🇮🇳</div>
+        <div style="font-family:var(--fh);font-weight:800;color:#fff;font-size:16px;margin-bottom:4px;">हिंदी</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);">Hindi</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-lg);padding:24px;text-align:center;transition:all .3s;" data-aos="fu" data-aos-delay="60" onmouseover="this.style.background='rgba(67,97,238,0.15)';this.style.borderColor='rgba(67,97,238,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,255,255,0.1)'">
+        <div style="font-size:32px;margin-bottom:12px;">🟠</div>
+        <div style="font-family:var(--fh);font-weight:800;color:#fff;font-size:16px;margin-bottom:4px;">मराठी</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);">Marathi</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-lg);padding:24px;text-align:center;transition:all .3s;" data-aos="fu" data-aos-delay="120" onmouseover="this.style.background='rgba(67,97,238,0.15)';this.style.borderColor='rgba(67,97,238,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,255,255,0.1)'">
+        <div style="font-size:32px;margin-bottom:12px;">☪️</div>
+        <div style="font-family:var(--fh);font-weight:800;color:#fff;font-size:16px;margin-bottom:4px;">اردو</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);">Urdu (RTL)</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-lg);padding:24px;text-align:center;transition:all .3s;" data-aos="fu" data-aos-delay="180" onmouseover="this.style.background='rgba(67,97,238,0.15)';this.style.borderColor='rgba(67,97,238,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,255,255,0.1)'">
+        <div style="font-size:32px;margin-bottom:12px;">🌾</div>
+        <div style="font-family:var(--fh);font-weight:800;color:#fff;font-size:16px;margin-bottom:4px;">ਪੰਜਾਬੀ</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);">Punjabi</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-lg);padding:24px;text-align:center;transition:all .3s;" data-aos="fu" data-aos-delay="240" onmouseover="this.style.background='rgba(67,97,238,0.15)';this.style.borderColor='rgba(67,97,238,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,255,255,0.1)'">
+        <div style="font-size:32px;margin-bottom:12px;">🐟</div>
+        <div style="font-family:var(--fh);font-weight:800;color:#fff;font-size:16px;margin-bottom:4px;">বাংলা</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);">Bengali</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-lg);padding:24px;text-align:center;transition:all .3s;" data-aos="fu" data-aos-delay="300" onmouseover="this.style.background='rgba(67,97,238,0.15)';this.style.borderColor='rgba(67,97,238,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,255,255,0.1)'">
+        <div style="font-size:32px;margin-bottom:12px;">☀️</div>
+        <div style="font-family:var(--fh);font-weight:800;color:#fff;font-size:16px;margin-bottom:4px;">ಕನ್ನಡ</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);">Kannada</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-lg);padding:24px;text-align:center;transition:all .3s;" data-aos="fu" data-aos-delay="360" onmouseover="this.style.background='rgba(67,97,238,0.15)';this.style.borderColor='rgba(67,97,238,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.borderColor='rgba(255,255,255,0.1)'">
+        <div style="font-size:32px;margin-bottom:12px;">🌊</div>
+        <div style="font-family:var(--fh);font-weight:800;color:#fff;font-size:16px;margin-bottom:4px;">ଓଡ଼ିଆ</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);">Odia</div>
+      </div>
+      <div style="background:linear-gradient(135deg,rgba(67,97,238,0.2),rgba(123,47,190,0.2));border:1px solid rgba(67,97,238,0.4);border-radius:var(--r-lg);padding:24px;text-align:center;transition:all .3s;" data-aos="fu" data-aos-delay="420">
+        <div style="font-size:32px;margin-bottom:12px;">🌐</div>
+        <div style="font-family:var(--fh);font-weight:800;color:#fff;font-size:16px;margin-bottom:4px;">English</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);">Default</div>
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-xl);padding:28px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;" data-aos="fu">
+      <div style="font-size:36px;">🗣️</div>
+      <div style="flex:1;min-width:200px;">
+        <div style="font-family:var(--fh);font-weight:800;color:#fff;font-size:18px;margin-bottom:6px;">Language Selector Built-In</div>
+        <div style="font-size:14px;color:rgba(255,255,255,0.55);line-height:1.6;">Switch language from Settings at any time. All UI strings, error messages, and confirmations update instantly. RTL layout flips automatically for Urdu users. No app restart required.</div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <div style="background:rgba(67,97,238,0.2);border:1px solid rgba(67,97,238,0.4);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:#7B8CDE;font-family:var(--fh);">8 Languages</div>
+        <div style="background:rgba(12,187,106,0.15);border:1px solid rgba(12,187,106,0.3);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:#0CBB6A;font-family:var(--fh);">RTL Support</div>
+        <div style="background:rgba(247,127,0,0.15);border:1px solid rgba(247,127,0,0.3);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:#F77F00;font-family:var(--fh);">Hot Swap</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ TECH ARCHITECTURE ══════════ -->
+<section style="padding:130px 0;background:var(--bg-s);" id="architecture">
+  <div class="ctr">
+    <div class="sh">
+      <span class="stag">Technical Architecture</span>
+      <h2 class="stit">The Engine <span class="gt">Stack</span></h2>
+      <p class="ssub">EdgePay uses a decoupled architecture where the React Native UI communicates with a specialized Banking Engine — keeping telephony, parsing, and state management cleanly separated.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+
+      <!-- Protocol Engine -->
+      <div style="background:#FFF;border:1px solid var(--border);border-radius:var(--r-xl);padding:36px;box-shadow:var(--sh-card);" data-aos="fr">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
+          <div style="width:48px;height:48px;border-radius:15px;background:var(--indigo-l);display:flex;align-items:center;justify-content:center;font-size:22px;">⚙️</div>
+          <div>
+            <div style="font-family:var(--fh);font-weight:800;color:var(--text-1);font-size:17px;">/src/engine</div>
+            <div style="font-size:13px;color:var(--text-3);">The Banking Protocol Engine</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="background:var(--bg-s);border:1px solid var(--border);border-radius:12px;padding:14px 16px;">
+            <div style="font-family:'Courier New',monospace;font-size:13px;font-weight:700;color:var(--indigo-m);margin-bottom:4px;">USSDBuilder.ts</div>
+            <div style="font-size:13px;color:var(--text-2);">Core protocol builder — constructs encoded NUUP-compliant USSD dial strings from transaction inputs</div>
+          </div>
+          <div style="background:var(--bg-s);border:1px solid var(--border);border-radius:12px;padding:14px 16px;">
+            <div style="font-family:'Courier New',monospace;font-size:13px;font-weight:700;color:var(--orange);margin-bottom:4px;">SmsParser.ts</div>
+            <div style="font-size:13px;color:var(--text-2);">Regex brain — identifies successful transaction alerts, extracts amounts and reference numbers from any bank format</div>
+          </div>
+          <div style="background:var(--bg-s);border:1px solid var(--border);border-radius:12px;padding:14px 16px;">
+            <div style="font-family:'Courier New',monospace;font-size:13px;font-weight:700;color:var(--green);margin-bottom:4px;">SmsService.ts / USSDService.ts</div>
+            <div style="font-size:13px;color:var(--text-2);">Bridge layer between React Native JS and the Kotlin NativeModules — abstracts telephony primitives</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Stack -->
+      <div style="background:#FFF;border:1px solid var(--border);border-radius:var(--r-xl);padding:36px;box-shadow:var(--sh-card);" data-aos="fl">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
+          <div style="width:48px;height:48px;border-radius:15px;background:var(--green-l);display:flex;align-items:center;justify-content:center;font-size:22px;">📱</div>
+          <div>
+            <div style="font-family:var(--fh);font-weight:800;color:var(--text-1);font-size:17px;">Mobile Stack</div>
+            <div style="font-size:13px;color:var(--text-3);">UI · State · Navigation</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="background:var(--bg-s);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-family:var(--fh);font-size:13px;font-weight:800;color:var(--text-1);margin-bottom:2px;">React Native + TypeScript</div>
+              <div style="font-size:12px;color:var(--text-3);">Frontend UI</div>
+            </div>
+            <div style="font-size:20px;">⚛️</div>
+          </div>
+          <div style="background:var(--bg-s);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-family:var(--fh);font-size:13px;font-weight:800;color:var(--text-1);margin-bottom:2px;">Zustand</div>
+              <div style="font-size:12px;color:var(--text-3);">Lightning-fast offline-optimized state</div>
+            </div>
+            <div style="font-size:20px;">🐻</div>
+          </div>
+          <div style="background:var(--bg-s);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-family:var(--fh);font-size:13px;font-weight:800;color:var(--text-1);margin-bottom:2px;">React Navigation (Stack)</div>
+              <div style="font-size:12px;color:var(--text-3);">Custom header transitions</div>
+            </div>
+            <div style="font-size:20px;">🧭</div>
+          </div>
+          <div style="background:var(--bg-s);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-family:var(--fh);font-size:13px;font-weight:800;color:var(--text-1);margin-bottom:2px;">Vanilla StyleSheet</div>
+              <div style="font-size:12px;color:var(--text-3);">Max performance on low-end hardware</div>
+            </div>
+            <div style="font-size:20px;">🎨</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Directory Structure -->
+    <div style="background:#0D0B1E;border:1px solid rgba(67,97,238,0.2);border-radius:var(--r-xl);padding:32px;box-shadow:0 20px 60px rgba(13,10,46,0.15);" data-aos="fu">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:20px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:#FF5F57;"></div>
+        <div style="width:10px;height:10px;border-radius:50%;background:#FEBC2E;"></div>
+        <div style="width:10px;height:10px;border-radius:50%;background:#28C840;"></div>
+        <span style="font-family:var(--fh);font-size:10px;font-weight:700;color:rgba(255,255,255,0.3);margin-left:auto;letter-spacing:1px;">PROJECT STRUCTURE</span>
+      </div>
+      <div style="font-family:'Courier New',monospace;font-size:12.5px;line-height:2;display:grid;grid-template-columns:1fr 1fr;gap:0 40px;">
+        <div>
+          <div style="color:#7B8CDE;">├── android/</div>
+          <div style="color:rgba(255,255,255,0.4);padding-left:20px;">Kotlin USSD &amp; SMS bridges</div>
+          <div style="color:rgba(255,255,255,0.4);padding-left:20px;">+ App Widgets (3 total)</div>
+          <div style="color:#7B8CDE;">├── src/</div>
+          <div style="color:#a3e635;padding-left:20px;">├── engine/</div>
+          <div style="color:rgba(255,255,255,0.4);padding-left:36px;">USSDBuilder.ts</div>
+          <div style="color:rgba(255,255,255,0.4);padding-left:36px;">SmsParser.ts</div>
+          <div style="color:rgba(255,255,255,0.4);padding-left:36px;">SmsService.ts</div>
+          <div style="color:rgba(255,255,255,0.4);padding-left:36px;">USSDService.ts</div>
+          <div style="color:#a3e635;padding-left:20px;">├── screens/</div>
+          <div style="color:rgba(255,255,255,0.4);padding-left:36px;">Dashboard, ExpenseTracker</div>
+        </div>
+        <div>
+          <div style="color:#a3e635;padding-left:20px;">├── components/</div>
+          <div style="color:rgba(255,255,255,0.4);padding-left:36px;">Goal &amp; Language Modals</div>
+          <div style="color:#a3e635;padding-left:20px;">├── store/</div>
+          <div style="color:rgba(255,255,255,0.4);padding-left:36px;">Zustand — Salary &amp; Spending</div>
+          <div style="color:#a3e635;padding-left:20px;">├── theme/</div>
+          <div style="color:rgba(255,255,255,0.4);padding-left:36px;">Design Tokens &amp; Palettes</div>
+          <div style="color:#a3e635;padding-left:20px;">└── utils/</div>
+          <div style="color:rgba(255,255,255,0.4);padding-left:36px;">Formatters, i18n, Constants</div>
+          <div style="color:#7B8CDE;">├── index.html</div>
+          <div style="color:rgba(255,255,255,0.4);padding-left:20px;">Landing Page &amp; Simulation</div>
+          <div style="color:#4ade80;">└── README.md</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ GETTING STARTED ══════════ -->
+<section style="padding:130px 0;background:#FFF;" id="install">
+  <div class="ctr">
+    <div class="sh">
+      <span class="stag">Getting Started</span>
+      <h2 class="stit">Run It <span class="gt">Yourself</span></h2>
+      <p class="ssub">EdgePay requires a physical Android device — USSD/SMS listeners cannot be emulated. A real SIM card is needed for full telephony functionality.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;">
+
+      <!-- Prerequisites -->
+      <div data-aos="fr">
+        <h3 style="font-family:var(--fh);font-size:18px;font-weight:800;color:var(--text-1);margin-bottom:20px;display:flex;align-items:center;gap:10px;"><span style="background:var(--indigo-l);border:1px solid var(--indigo-b);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--indigo-m);">01</span> Prerequisites</h3>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:32px;">
+          <div style="display:flex;align-items:center;gap:14px;background:var(--bg-s);border:1px solid var(--border);border-radius:12px;padding:14px 16px;">
+            <span style="font-size:20px;">🟢</span>
+            <div>
+              <div style="font-family:var(--fh);font-weight:700;font-size:14px;color:var(--text-1);">Node.js v18+</div>
+              <div style="font-size:12px;color:var(--text-3);">JavaScript runtime</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;background:var(--bg-s);border:1px solid var(--border);border-radius:12px;padding:14px 16px;">
+            <span style="font-size:20px;">🤖</span>
+            <div>
+              <div style="font-family:var(--fh);font-weight:700;font-size:14px;color:var(--text-1);">Android SDK (API 29+)</div>
+              <div style="font-size:12px;color:var(--text-3);">Android 10 or higher</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;background:rgba(247,127,0,0.05);border:1.5px solid var(--orange-b);border-radius:12px;padding:14px 16px;">
+            <span style="font-size:20px;">📱</span>
+            <div>
+              <div style="font-family:var(--fh);font-weight:700;font-size:14px;color:var(--orange);">Physical Android Device Required</div>
+              <div style="font-size:12px;color:var(--text-3);">USSD/SMS cannot be emulated — real SIM card needed</div>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="font-family:var(--fh);font-size:18px;font-weight:800;color:var(--text-1);margin-bottom:20px;display:flex;align-items:center;gap:10px;"><span style="background:var(--green-l);border:1px solid var(--green-b);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--green);">02</span> How It Works — Workflow</h3>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);">
+            <div style="width:26px;height:26px;border-radius:8px;background:var(--indigo-l);border:1px solid var(--indigo-b);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:11px;font-weight:800;color:var(--indigo-m);flex-shrink:0;">1</div>
+            <div><div style="font-family:var(--fh);font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:2px;">Onboarding</div><div style="font-size:12px;color:var(--text-2);">User selects their bank — SBI or HDFC/others</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);">
+            <div style="width:26px;height:26px;border-radius:8px;background:var(--orange-l);border:1px solid var(--orange-b);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:11px;font-weight:800;color:var(--orange);flex-shrink:0;">2</div>
+            <div><div style="font-family:var(--fh);font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:2px;">Dashboard</div><div style="font-size:12px;color:var(--text-2);">App checks local store for last known balance (masked by default)</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);">
+            <div style="width:26px;height:26px;border-radius:8px;background:var(--green-l);border:1px solid var(--green-b);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:11px;font-weight:800;color:var(--green);flex-shrink:0;">3</div>
+            <div><div style="font-family:var(--fh);font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:2px;">Check Balance</div><div style="font-size:12px;color:var(--text-2);">SBI → SMS to 09223766666 → AD-SBIPSG-S parsed. HDFC/others → *99*3# via USSD</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;padding:12px 0;">
+            <div style="width:26px;height:26px;border-radius:8px;background:var(--purple-l);border:1px solid rgba(123,47,190,0.25);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:11px;font-weight:800;color:var(--purple);flex-shrink:0;">4</div>
+            <div><div style="font-family:var(--fh);font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:2px;">Send Money</div><div style="font-size:12px;color:var(--text-2);">Input UPI ID or scan QR → USSDBuilder creates NUUP dial string → UssdModule dispatches call → SMS confirms</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Installation Commands -->
+      <div data-aos="fl">
+        <h3 style="font-family:var(--fh);font-size:18px;font-weight:800;color:var(--text-1);margin-bottom:20px;display:flex;align-items:center;gap:10px;"><span style="background:var(--orange-l);border:1px solid var(--orange-b);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--orange);">03</span> Installation</h3>
+        <div style="background:#0D0B1E;border:1px solid rgba(67,97,238,0.2);border-radius:var(--r-xl);padding:28px;box-shadow:0 20px 60px rgba(13,10,46,0.12);">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:20px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#FF5F57;"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#FEBC2E;"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#28C840;"></div>
+            <span style="font-family:var(--fh);font-size:10px;font-weight:700;color:rgba(255,255,255,0.3);margin-left:auto;letter-spacing:1px;">TERMINAL</span>
+          </div>
+          <div style="font-family:'Courier New',monospace;font-size:12.5px;line-height:2.2;">
+            <div style="color:rgba(255,255,255,0.3);font-size:10px;margin-bottom:6px;"># 1. Clone the repository</div>
+            <div style="color:#7B8CDE;">$</div><div style="color:#e0e0f0;"> git clone https://github.com/</div>
+            <div style="color:#a3e635;padding-left:14px;">yash-hackathon-email/edgepay.git</div>
+            <div style="margin:8px 0;border-top:1px solid rgba(255,255,255,0.06);"></div>
+            <div style="color:rgba(255,255,255,0.3);font-size:10px;margin-bottom:6px;"># 2. Install dependencies</div>
+            <div style="color:#7B8CDE;">$</div><div style="color:#e0e0f0;"> npm install</div>
+            <div style="margin:8px 0;border-top:1px solid rgba(255,255,255,0.06);"></div>
+            <div style="color:rgba(255,255,255,0.3);font-size:10px;margin-bottom:6px;"># 3. Compile and install on device</div>
+            <div style="color:#7B8CDE;">$</div><div style="color:#e0e0f0;"> npx react-native run-android</div>
+            <div style="color:#a3e635;padding-left:14px;">--variant=release</div>
+            <div style="margin:12px 0;border-top:1px solid rgba(255,255,255,0.06);"></div>
+            <div style="color:#4ade80;">✓ EdgePay installed on device <span style="animation:blink 1.2s step-end infinite;display:inline-block;width:7px;height:12px;background:#4361EE;vertical-align:middle;"></span></div>
+          </div>
+        </div>
+
+        <!-- Or just download -->
+        <div style="margin-top:20px;background:linear-gradient(135deg,#F77F00,#E63946);border-radius:var(--r-xl);padding:24px;text-align:center;">
+          <div style="font-family:var(--fh);font-weight:800;color:#fff;font-size:16px;margin-bottom:8px;">Or just download the APK</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.8);margin-bottom:16px;">No build setup needed — works on any Android 7.0+ device</div>
+          <a href="https://github.com/yash-hackathon-email/edgepay/releases/download/EdgePay/EdgePay.apk" download style="display:inline-flex;align-items:center;gap:10px;background:#fff;color:#E63946;border-radius:var(--r-lg);padding:14px 28px;font-family:var(--fh);font-weight:800;font-size:15px;text-decoration:none;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download APK — 23MB
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1292,9 +1842,15 @@
           <a href="#features">Features</a>
           <a href="#origin">Our Story</a>
           <a href="#how-it-works">How It Works</a>
+          <a href="#banks">Adaptive Banks</a>
+          <a href="#widgets">Widget Ecosystem</a>
+          <a href="#salary-engine">Salary Engine</a>
           <a href="#challenges">Challenges</a>
-          <a href="#news">Why It Matters</a>
           <a href="#services">Services</a>
+          <a href="#languages">Languages</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#install">Install</a>
+          <a href="#news">Why It Matters</a>
           <a href="#download">Download</a>
         </div>
         <div class="fcol">
