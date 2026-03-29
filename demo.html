@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EdgePay — Offline Financial Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#04040c;--surface:#0a0a18;--green:#00e87a;--blue:#4f8ef7;--purple:#9f7aea;
+  --orange:#ff8c42;--red:#ff5f6d;--yellow:#ffb400;--pink:#ff64c8;
+  --text:#f0f0ff;--muted:#5a5a80;--dim:#22223a;--terminal-bg:#060a0e;
+}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:
+  radial-gradient(ellipse 80% 60% at 20% 20%,rgba(0,232,122,.05),transparent),
+  radial-gradient(ellipse 60% 80% at 80% 80%,rgba(79,142,247,.05),transparent),
+  radial-gradient(ellipse 50% 50% at 50% 110%,rgba(159,122,234,.03),transparent);
+  pointer-events:none;z-index:0;}
+
+/* ── PAGE HEADER ── */
+.page-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid rgba(255,255,255,.06);position:relative;z-index:10;flex-wrap:wrap;gap:10px;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--green),#00b85e);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#000;box-shadow:0 0 14px rgba(0,232,122,.3);}
+.logo-name{font-weight:800;font-size:18px;letter-spacing:-.5px;}
+.sim-tag{background:rgba(255,140,66,.12);border:1px solid rgba(255,140,66,.3);color:#ff8c42;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;font-family:'JetBrains Mono',monospace;animation:tagpulse 3s infinite;}
+@keyframes tagpulse{0%,100%{opacity:1;}50%{opacity:.7;}}
+.hdr-center{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;}
+.hdr-badge{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);padding:4px 11px;border-radius:20px;font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted);display:flex;align-items:center;gap:6px;}
+.hdr-badge .dot{width:5px;height:5px;border-radius:50%;}
+.dot-g{background:var(--green);animation:pdot 2s infinite;box-shadow:0 0 6px var(--green);}
+.dot-b{background:var(--blue);}
+.dot-p{background:var(--purple);}
+@keyframes pdot{0%,100%{opacity:1;}50%{opacity:.25;}}
+.hdr-tagline{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.team-tag{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;background:rgba(255,255,255,.03);padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.06);}
+
+/* ── MAIN LAYOUT ── */
+.main{display:flex;justify-content:center;align-items:flex-start;gap:36px;padding:28px 24px;position:relative;z-index:1;flex-wrap:wrap;}
+
+/* ── PHONE ── */
+.phone-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;flex-shrink:0;}
+.phone{
+  width:360px;
+  background:linear-gradient(160deg,#1c1c2e,#0d0d1a);
+  border-radius:52px;padding:13px;
+  box-shadow:0 0 0 1px rgba(255,255,255,.07),0 40px 80px rgba(0,0,0,.85),0 0 90px rgba(0,232,122,.04),inset 0 1px 0 rgba(255,255,255,.08);
+  position:relative;
+}
+.phone::before{content:'';position:absolute;right:-3px;top:130px;width:3px;height:55px;background:#1a1a2c;border-radius:0 2px 2px 0;}
+.phone::after{content:'';position:absolute;left:-3px;top:110px;width:3px;height:30px;background:#1a1a2c;border-radius:2px 0 0 2px;box-shadow:0 46px 0 #1a1a2c;}
+.screen-wrap{background:#000;border-radius:40px;overflow:hidden;position:relative;height:740px;}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:110px;height:32px;background:#000;border-radius:0 0 20px 20px;z-index:30;display:flex;align-items:center;justify-content:center;gap:8px;}
+.notch-cam{width:10px;height:10px;background:#0f0f1a;border-radius:50%;border:1px solid #1a1a2e;}
+.sbar{display:flex;justify-content:space-between;align-items:center;padding:14px 22px 6px;font-size:12px;font-weight:700;color:#fff;position:relative;z-index:10;background:#000;}
+.sbar-icons{display:flex;align-items:center;gap:5px;}
+.sig-icon{display:flex;align-items:flex-end;gap:1px;height:12px;}
+.sig-bar{width:3px;background:#fff;border-radius:1px;}
+.gsm-badge{background:rgba(0,232,122,.15);border:1px solid rgba(0,232,122,.25);color:var(--green);padding:1px 5px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.5px;}
+
+/* Screens */
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:#050508;overflow:hidden;}
+.screen.active{display:flex;animation:sfade .22s ease;}
+@keyframes sfade{from{opacity:0;transform:scale(.975);}to{opacity:1;transform:scale(1);}}
+
+/* Bottom nav */
+.bnav{display:flex;border-top:1px solid rgba(255,255,255,.06);background:rgba(6,6,14,.97);backdrop-filter:blur(20px);padding:8px 0 22px;}
+.bni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px;transition:.2s;}
+.bni-icon{font-size:18px;filter:grayscale(1);opacity:.5;transition:.2s;}
+.bni-label{font-size:9px;color:var(--muted);font-weight:700;transition:.2s;}
+.bni.on .bni-icon{filter:none;opacity:1;}
+.bni.on .bni-label{color:var(--green);}
+
+/* ── HOME SCREEN ── */
+.home-hdr{padding:8px 18px 8px;display:flex;align-items:center;justify-content:space-between;}
+.app-nm{font-weight:800;font-size:16px;letter-spacing:-.5px;}
+.offline-pill{background:rgba(0,232,122,.1);border:1px solid rgba(0,232,122,.25);color:var(--green);padding:3px 9px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:.5px;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:4px;}
+.av{width:34px;height:34px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;}
+.welcome{padding:2px 18px 10px;}
+.w-sub{font-size:11px;color:var(--muted);}
+.w-name{font-size:18px;font-weight:800;color:#fff;margin-top:1px;}
+
+/* Balance card with mask toggle */
+.bal-card{margin:0 14px 14px;background:linear-gradient(135deg,#162336,#0b1525);border:1px solid rgba(79,142,247,.18);border-radius:20px;padding:16px 18px;position:relative;overflow:hidden;}
+.bal-card::before{content:'';position:absolute;top:-30px;right:-30px;width:90px;height:90px;background:radial-gradient(circle,rgba(79,142,247,.14),transparent);border-radius:50%;}
+.bal-card::after{content:'';position:absolute;bottom:-20px;left:40px;width:60px;height:60px;background:radial-gradient(circle,rgba(0,232,122,.06),transparent);border-radius:50%;}
+.bal-top{display:flex;justify-content:space-between;align-items:flex-start;}
+.bal-lbl{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px;}
+.mask-btn{background:rgba(255,255,255,.07);border:none;color:rgba(255,255,255,.4);font-size:14px;cursor:pointer;padding:3px 7px;border-radius:8px;transition:.2s;font-family:monospace;}
+.mask-btn:active{background:rgba(255,255,255,.14);}
+.bal-amt{font-size:30px;font-weight:800;color:#fff;letter-spacing:-1px;font-family:'JetBrains Mono',monospace;}
+.bal-bank{margin-top:8px;font-size:11px;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.bank-tag{background:rgba(79,142,247,.15);border:1px solid rgba(79,142,247,.2);color:var(--blue);padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700;}
+.hdfc-tag{background:rgba(159,122,234,.15);border:1px solid rgba(159,122,234,.2);color:var(--purple);}
+
+/* Quick actions */
+.qa{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 14px 14px;}
+.qa-btn{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent;}
+.qa-btn:active{transform:scale(.88);}
+.qa-ico{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:19px;}
+.qa-lbl{font-size:9px;font-weight:700;color:var(--muted);text-align:center;}
+
+/* Salary bar */
+.sal-card{margin:0 14px 14px;background:rgba(255,180,0,.06);border:1px solid rgba(255,180,0,.15);border-radius:14px;padding:12px 14px;}
+.sal-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.sal-lbl{font-size:10px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;}
+.sal-pct{font-size:11px;font-weight:800;color:var(--yellow);font-family:'JetBrains Mono',monospace;}
+.sal-bar-bg{height:5px;background:rgba(255,255,255,.06);border-radius:10px;overflow:hidden;}
+.sal-bar-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--yellow));border-radius:10px;transition:width .5s ease;}
+.sal-info{display:flex;justify-content:space-between;margin-top:5px;}
+.sal-small{font-size:9px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+
+.sec-title{padding:0 18px 8px;font-size:10px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;}
+.tx-list{padding:0 14px;flex:1;overflow-y:auto;}
+.tx-list::-webkit-scrollbar{display:none;}
+.txi{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;}
+.txi-av{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;}
+.txi-inf{flex:1;min-width:0;}
+.txi-name{font-size:12px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.txi-time{font-size:10px;color:var(--muted);margin-top:1px;}
+.txi-amt{font-weight:800;font-size:13px;flex-shrink:0;}
+.txi-amt.s{color:#ff6b6b;}.txi-amt.r{color:var(--green);}
+
+/* ── SEND SCREEN ── */
+.scr-hdr{display:flex;align-items:center;gap:10px;padding:14px 18px 10px;}
+.back{width:34px;height:34px;background:rgba(255,255,255,.07);border-radius:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;color:#fff;transition:.15s;flex-shrink:0;}
+.back:active{background:rgba(255,255,255,.14);}
+.scr-title{font-size:16px;font-weight:800;}
+.ig{padding:0 18px 12px;}
+.ilbl{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.ifield{width:100%;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);border-radius:14px;padding:13px 15px;color:#fff;font-size:14px;font-family:'Sora',sans-serif;outline:none;transition:.2s;}
+.ifield:focus{border-color:var(--blue);background:rgba(79,142,247,.04);}
+.ifield::placeholder{color:rgba(255,255,255,.2);}
+.bank-select{width:100%;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);border-radius:14px;padding:11px 15px;color:#fff;font-size:13px;font-family:'Sora',sans-serif;outline:none;cursor:pointer;appearance:none;transition:.2s;}
+.bank-select:focus{border-color:var(--purple);}
+.bank-select option{background:#0a0a18;}
+.div-text{text-align:center;color:var(--muted);font-size:11px;padding:4px 0;}
+.qr-row{margin:0 18px 12px;background:rgba(79,142,247,.07);border:1.5px dashed rgba(79,142,247,.25);border-radius:14px;padding:14px;color:var(--blue);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:.15s;}
+.qr-row:active{background:rgba(79,142,247,.14);}
+.prc-btn{margin:auto 18px 18px;display:block;width:calc(100% - 36px);background:linear-gradient(135deg,var(--blue),#3570e8);border:none;border-radius:14px;padding:15px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:'Sora',sans-serif;transition:.15s;box-shadow:0 8px 24px rgba(79,142,247,.28);}
+.prc-btn:active{transform:scale(.97);}
+.prc-btn.green{background:linear-gradient(135deg,var(--green),#00b85e);box-shadow:0 8px 24px rgba(0,232,122,.25);color:#000;}
+.ussd-preview{margin:0 18px 12px;background:rgba(0,0,0,.4);border:1px solid rgba(0,232,122,.12);border-radius:12px;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--green);}
+.ussd-preview span{color:rgba(255,255,255,.35);}
+
+/* ── PIN SCREEN ── */
+.pin-sum{margin:0 14px 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:16px;}
+.pin-to{font-size:11px;color:var(--muted);margin-bottom:4px;}
+.pin-rec{font-size:14px;font-weight:700;color:#fff;font-family:'JetBrains Mono',monospace;}
+.pin-big{font-size:26px;font-weight:800;color:#fff;margin-top:2px;}
+.pin-bk{font-size:11px;color:var(--muted);margin-top:4px;}
+.pin-lbl{text-align:center;font-size:12px;color:var(--muted);margin-bottom:6px;}
+.pdots{display:flex;justify-content:center;gap:11px;padding:12px 0 18px;}
+.pd{width:13px;height:13px;border-radius:50%;border:2px solid rgba(255,255,255,.18);transition:.12s;}
+.pd.on{background:var(--blue);border-color:var(--blue);box-shadow:0 0 10px rgba(79,142,247,.4);}
+.kpad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 18px 18px;}
+.key{height:56px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:700;cursor:pointer;transition:.1s;color:#fff;font-family:'Sora',sans-serif;-webkit-tap-highlight-color:transparent;}
+.key:active{background:rgba(79,142,247,.18);border-color:var(--blue);transform:scale(.91);}
+.key.del{font-size:17px;color:var(--muted);}
+.key.ok{background:rgba(0,232,122,.08);border-color:rgba(0,232,122,.18);color:var(--green);font-size:20px;}
+.key.ok:active{background:rgba(0,232,122,.2);}
+
+/* ── PROCESSING ── */
+.proc-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;}
+.ussd-spin{width:72px;height:72px;border:3px solid rgba(0,232,122,.1);border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:18px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.proc-title{font-size:17px;font-weight:800;margin-bottom:4px;}
+.proc-sub{font-size:11px;color:var(--muted);margin-bottom:16px;font-family:'JetBrains Mono',monospace;text-align:center;}
+.mini-log{width:100%;background:rgba(0,0,0,.6);border:1px solid rgba(0,232,122,.12);border-radius:12px;padding:12px;font-family:'JetBrains Mono',monospace;font-size:11px;min-height:100px;max-height:140px;overflow-y:auto;}
+.mini-log::-webkit-scrollbar{display:none;}
+.mll{color:var(--green);margin-bottom:3px;animation:lin .25s ease;}
+@keyframes lin{from{opacity:0;transform:translateX(-4px);}to{opacity:1;transform:translateX(0);}}
+
+/* ── SUCCESS ── */
+.succ-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:9px;}
+.succ-ring{width:90px;height:90px;border-radius:50%;background:rgba(0,232,122,.08);border:3px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:36px;animation:pop .4s cubic-bezier(.175,.885,.32,1.275);margin-bottom:4px;}
+@keyframes pop{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+.succ-title{font-size:21px;font-weight:800;}
+.succ-amt{font-size:26px;font-weight:800;color:var(--green);font-family:'JetBrains Mono',monospace;}
+.succ-to{font-size:13px;color:var(--muted);}
+.succ-ref{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:13px 18px;width:100%;text-align:center;}
+.ref-lbl{font-size:10px;color:var(--muted);margin-bottom:3px;}
+.ref-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:#fff;}
+.sms-ok{font-size:11px;color:var(--green);display:flex;align-items:center;gap:5px;}
+.done-btn{width:100%;background:var(--green);border:none;border-radius:14px;padding:15px;color:#000;font-size:14px;font-weight:800;cursor:pointer;font-family:'Sora',sans-serif;margin-top:4px;transition:.15s;}
+.done-btn:active{transform:scale(.97);}
+
+/* ── HISTORY ── */
+.hist-list{flex:1;overflow-y:auto;padding:0 14px;}
+.hist-list::-webkit-scrollbar{display:none;}
+.hist-filter{display:flex;gap:6px;padding:0 14px 12px;overflow-x:auto;}
+.hist-filter::-webkit-scrollbar{display:none;}
+.hf-btn{white-space:nowrap;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:var(--muted);padding:5px 12px;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer;transition:.2s;}
+.hf-btn.on{background:rgba(0,232,122,.1);border-color:rgba(0,232,122,.25);color:var(--green);}
+
+/* ── ACCOUNT ── */
+.acc-hdr{padding:14px 18px;display:flex;flex-direction:column;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.05);}
+.acc-av{width:62px;height:62px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:20px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:24px;}
+.acc-name{font-size:16px;font-weight:800;}
+.acc-upi{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.acc-bank-pills{display:flex;gap:6px;margin-top:4px;}
+.acc-bank-pill{padding:2px 9px;border-radius:20px;font-size:10px;font-weight:700;}
+.svc-list{padding:12px 14px;display:flex;flex-direction:column;gap:8px;flex:1;overflow-y:auto;}
+.svc-list::-webkit-scrollbar{display:none;}
+.svc{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:13px;display:flex;align-items:center;gap:11px;cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent;}
+.svc:active{background:rgba(255,255,255,.08);transform:scale(.98);}
+.svc-ico{font-size:20px;width:40px;height:40px;background:rgba(255,255,255,.05);border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.svc-inf{flex:1;}
+.svc-nm{font-size:13px;font-weight:700;}
+.svc-desc{font-size:10px;color:var(--muted);margin-top:1px;font-family:'JetBrains Mono',monospace;}
+.svc-arr{color:var(--muted);font-size:18px;}
+
+/* ── QR SCREEN ── */
+.qr-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;}
+.qr-finder{width:210px;height:210px;position:relative;}
+.cam-feed{position:absolute;inset:0;background:#060e06;border-radius:6px;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.fake-qr{display:grid;grid-template-columns:repeat(9,1fr);grid-template-rows:repeat(9,1fr);gap:2px;width:110px;height:110px;}
+.fqc{border-radius:1px;transition:.2s;}
+.scan-line{position:absolute;left:8px;right:8px;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent);animation:scanl 2s linear infinite;box-shadow:0 0 10px var(--green);}
+@keyframes scanl{0%{top:8px;}100%{top:198px;}}
+.corner{position:absolute;width:36px;height:36px;border-color:var(--green);border-style:solid;}
+.c-tl{top:0;left:0;border-width:3px 0 0 3px;border-radius:4px 0 0 0;}
+.c-tr{top:0;right:0;border-width:3px 3px 0 0;border-radius:0 4px 0 0;}
+.c-bl{bottom:0;left:0;border-width:0 0 3px 3px;border-radius:0 0 0 4px;}
+.c-br{bottom:0;right:0;border-width:0 3px 3px 0;border-radius:0 0 4px 0;}
+.qr-hint{font-size:12px;color:var(--muted);text-align:center;}
+.qr-engine-info{background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px 14px;width:100%;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);}
+.qr-engine-info div{margin-bottom:3px;}
+.qr-engine-info span{color:var(--green);}
+
+/* ── BALANCE ── */
+.bal-res{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;gap:10px;}
+
+/* ── TOAST ── */
+.toast{position:absolute;bottom:90px;left:16px;right:16px;border-radius:13px;padding:12px 16px;font-size:12px;z-index:200;text-align:center;animation:sfade .3s ease;}
+
+/* ── WALLET / EXPENSES SCREEN ── */
+.exp-hdr-info{padding:4px 18px 14px;display:flex;gap:10px;}
+.exp-card{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px;text-align:center;}
+.exp-card-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:4px;}
+.exp-card-val{font-size:15px;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.exp-ring-wrap{display:flex;justify-content:center;padding:0 18px 14px;}
+.exp-ring-outer{position:relative;width:160px;height:160px;}
+.exp-ring-outer svg{transform:rotate(-90deg);}
+.exp-ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.exp-pct{font-size:32px;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.exp-pct-lbl{font-size:10px;color:var(--muted);}
+.exp-cats{padding:0 14px;display:flex;flex-direction:column;gap:8px;flex:1;overflow-y:auto;}
+.exp-cats::-webkit-scrollbar{display:none;}
+.exp-cat{display:flex;align-items:center;gap:10px;}
+.exp-cat-ico{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.exp-cat-inf{flex:1;}
+.exp-cat-nm{font-size:12px;font-weight:700;}
+.exp-cat-bar-bg{height:4px;background:rgba(255,255,255,.06);border-radius:10px;margin-top:4px;overflow:hidden;}
+.exp-cat-bar{height:100%;border-radius:10px;transition:width .5s ease;}
+.exp-cat-amt{font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;flex-shrink:0;}
+
+/* ── LANGUAGE SCREEN ── */
+.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 14px;flex:1;overflow-y:auto;}
+.lang-grid::-webkit-scrollbar{display:none;}
+.lang-btn{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.07);border-radius:14px;padding:14px;text-align:center;cursor:pointer;transition:.2s;}
+.lang-btn.sel{background:rgba(0,232,122,.08);border-color:rgba(0,232,122,.3);}
+.lang-btn:active{transform:scale(.95);}
+.lang-native{font-size:17px;font-weight:800;}
+.lang-en{font-size:10px;color:var(--muted);margin-top:3px;}
+.lang-sel-ind{font-size:16px;}
+
+/* ── SALARY MODAL ── */
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:flex-end;justify-content:center;animation:sfade .2s ease;}
+.modal-sheet{background:#0d0d1a;border:1px solid rgba(255,255,255,.1);border-radius:24px 24px 0 0;padding:22px 18px;width:100%;}
+.modal-handle{width:36px;height:4px;background:rgba(255,255,255,.15);border-radius:10px;margin:0 auto 18px;}
+.modal-title{font-size:16px;font-weight:800;margin-bottom:16px;}
+.modal-row{margin-bottom:14px;}
+.modal-lbl{font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700;}
+.modal-input{width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;color:#fff;font-size:15px;font-family:'JetBrains Mono',monospace;outline:none;transition:.2s;}
+.modal-input:focus{border-color:var(--yellow);}
+.modal-save{width:100%;background:linear-gradient(135deg,var(--yellow),#e6a200);border:none;border-radius:12px;padding:14px;color:#000;font-size:14px;font-weight:800;cursor:pointer;font-family:'Sora',sans-serif;margin-top:4px;}
+
+/* ── HINTS ── */
+.hints{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;}
+.hbtn{background:rgba(79,142,247,.07);border:1px solid rgba(79,142,247,.18);color:var(--blue);padding:7px 13px;border-radius:20px;font-size:11px;cursor:pointer;font-family:'Sora',sans-serif;transition:.15s;font-weight:600;}
+.hbtn:hover{background:rgba(79,142,247,.16);transform:translateY(-1px);}
+.hbtn.g{background:rgba(0,232,122,.07);border-color:rgba(0,232,122,.18);color:var(--green);}
+.hbtn.y{background:rgba(255,180,0,.07);border-color:rgba(255,180,0,.18);color:var(--yellow);}
+.hbtn.p{background:rgba(159,122,234,.07);border-color:rgba(159,122,234,.18);color:var(--purple);}
+
+/* ── TERMINAL PANEL ── */
+.term-panel{width:420px;flex-shrink:0;display:flex;flex-direction:column;gap:12px;}
+
+/* Feature badges */
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.feat-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:10px 12px;display:flex;align-items:flex-start;gap:8px;}
+.feat-ico{font-size:18px;flex-shrink:0;margin-top:1px;}
+.feat-inf{}
+.feat-nm{font-size:11px;font-weight:700;color:#fff;margin-bottom:2px;}
+.feat-ds{font-size:9px;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.4;}
+
+.net-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px;}
+.box-title{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-family:'JetBrains Mono',monospace;margin-bottom:11px;}
+.net-row{display:flex;gap:8px;}
+.ni{flex:1;background:rgba(255,255,255,.03);border-radius:9px;padding:9px 7px;text-align:center;}
+.ni-lbl{font-size:9px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px;letter-spacing:.5px;}
+.ni-val{font-size:10px;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.ok{color:var(--green);}.act{color:#ffb400;}.idle{color:var(--muted);}.err{color:var(--red);}
+.sig{display:flex;align-items:flex-end;gap:2px;height:12px;justify-content:center;margin-top:4px;}
+.sb{width:3px;border-radius:1px;background:var(--green);transition:.3s;}
+.sb.off{background:rgba(255,255,255,.1);}
+
+.flow-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px;}
+.steps{display:flex;flex-direction:column;gap:6px;}
+.step{display:flex;align-items:center;gap:9px;opacity:.22;transition:.3s;}
+.step.active{opacity:1;}.step.done{opacity:1;}
+.sn{width:22px;height:22px;border-radius:7px;border:1.5px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--muted);flex-shrink:0;transition:.3s;}
+.step.done .sn{background:var(--green);border-color:var(--green);color:#000;}
+.step.active .sn{background:rgba(79,142,247,.15);border-color:var(--blue);color:var(--blue);animation:spulse 1.2s infinite;}
+@keyframes spulse{0%,100%{box-shadow:0 0 0 0 rgba(79,142,247,.3);}50%{box-shadow:0 0 0 4px rgba(79,142,247,.08);}}
+.st{font-size:11px;font-family:'JetBrains Mono',monospace;}
+.step.done .st{color:var(--green);}.step.active .st{color:var(--blue);}.step .st{color:var(--muted);}
+
+.terminal{background:var(--terminal-bg);border:1px solid rgba(0,232,122,.1);border-radius:14px;display:flex;flex-direction:column;overflow:hidden;font-family:'JetBrains Mono',monospace;}
+.term-hdr{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:7px;}
+.td{width:9px;height:9px;border-radius:50%;}
+.td.r{background:#ff5f57;}.td.y{background:#febc2e;}.td.g{background:#28c840;}
+.term-name{font-size:11px;color:rgba(255,255,255,.4);margin-left:4px;flex:1;}
+.term-clr{font-size:10px;color:var(--muted);cursor:pointer;transition:.2s;}
+.term-clr:hover{color:#fff;}
+.term-body{overflow-y:auto;padding:12px;min-height:300px;max-height:380px;}
+.term-body::-webkit-scrollbar{width:3px;}
+.term-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px;}
+
+.lg{margin-bottom:10px;animation:lin .25s ease;}
+.lc{display:flex;align-items:center;gap:7px;margin-bottom:2px;}
+.lts{font-size:9px;color:rgba(255,255,255,.18);}
+.lcomp{font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;min-width:38px;text-align:center;}
+.lcomp.edge{background:rgba(79,142,247,.15);color:#4f8ef7;}
+.lcomp.ussd{background:rgba(0,232,122,.15);color:#00e87a;}
+.lcomp.tel{background:rgba(255,180,0,.15);color:#ffb400;}
+.lcomp.npci{background:rgba(180,0,255,.15);color:#b400ff;}
+.lcomp.sms{background:rgba(0,200,255,.15);color:#00c8ff;}
+.lcomp.sys{background:rgba(255,255,255,.07);color:rgba(255,255,255,.35);}
+.lcomp.qr{background:rgba(255,100,200,.15);color:#ff64c8;}
+.lcomp.sal{background:rgba(255,180,0,.12);color:#ffb400;}
+.lcomp.lang{background:rgba(159,122,234,.15);color:#9f7aea;}
+.ldollar{font-size:10px;color:rgba(255,255,255,.18);}
+.lact{font-size:11px;color:rgba(255,255,255,.75);}
+.ldet{padding-left:14px;border-left:2px solid rgba(255,255,255,.05);margin-left:4px;}
+.ldl{font-size:10px;color:rgba(255,255,255,.28);margin-bottom:2px;display:flex;gap:5px;}
+.ldl .ar{color:rgba(255,255,255,.14);}
+.ldl .k{color:rgba(255,255,255,.3);}
+.ldl .v{color:rgba(0,232,122,.65);}
+.ldl .v.b{color:rgba(79,142,247,.8);}
+.ldl .v.y{color:rgba(255,180,0,.8);}
+.ldl .v.g{color:var(--green);font-weight:700;}
+.ldl .v.p{color:rgba(159,122,234,.9);}
+.cur{display:inline-block;width:7px;height:13px;background:var(--green);animation:blink 1s step-end infinite;vertical-align:middle;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .main{flex-direction:column;align-items:center;padding:20px;}
+  .term-panel{width:380px;}
+  .feat-grid{grid-template-columns:1fr 1fr 1fr 1fr;}
+}
+@media(max-width:600px){
+  .term-panel{width:360px;}
+  .feat-grid{grid-template-columns:1fr 1fr;}
+  .page-hdr{padding:12px 16px;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-hdr">
+  <div class="logo">
+    <div class="logo-icon">E</div>
+    <div class="logo-name">EdgePay</div>
+    <div class="sim-tag">● LIVE SIM</div>
+  </div>
+  <div class="hdr-center">
+    <div class="hdr-badge"><div class="dot dot-g"></div>GSM/USSD Active</div>
+    <div class="hdr-badge"><div class="dot dot-b"></div>NPCI NUUP</div>
+    <div class="hdr-badge"><div class="dot dot-p"></div>SBI + HDFC</div>
+    <div class="hdr-badge"><div class="dot" style="background:var(--orange);"></div>Offline-First</div>
+  </div>
+  <div class="team-tag">👾 Team "The Last Braincells"</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- PHONE -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="screen-wrap">
+
+        <!-- Notch -->
+        <div class="notch"><div class="notch-cam"></div></div>
+
+        <!-- Status Bar -->
+        <div class="sbar" id="sbar">
+          <span style="font-weight:800;font-size:12px;" id="clock">9:05</span>
+          <div style="width:80px;"></div>
+          <div class="sbar-icons">
+            <div class="gsm-badge">2G</div>
+            <div class="sig-icon">
+              <div class="sig-bar" style="height:3px;"></div>
+              <div class="sig-bar" style="height:5px;"></div>
+              <div class="sig-bar" style="height:8px;"></div>
+              <div class="sig-bar" style="height:11px;"></div>
+            </div>
+            <span style="font-size:11px;">🔋</span>
+          </div>
+        </div>
+
+        <!-- ═══ HOME ═══ -->
+        <div class="screen active" id="screen-home">
+          <div class="home-hdr">
+            <div class="app-nm">EdgePay</div>
+            <div class="offline-pill"><div class="dot dot-g" style="width:5px;height:5px;"></div>OFFLINE</div>
+            <div class="av">N</div>
+          </div>
+          <div class="welcome">
+            <div class="w-sub">Welcome back,</div>
+            <div class="w-name">Nishant 👋</div>
+          </div>
+          <div class="bal-card">
+            <div class="bal-top">
+              <div class="bal-lbl">Available Balance</div>
+              <button class="mask-btn" id="mask-toggle" onclick="toggleMask()">👁</button>
+            </div>
+            <div class="bal-amt" id="disp-bal">₹ ******</div>
+            <div class="bal-bank">Linked Bank: <span class="bank-tag" id="home-bank-tag">SBI</span> • A/c ••••<span id="home-acno">1234</span></div>
+          </div>
+          <!-- Salary/Expense Bar -->
+          <div class="sal-card" id="sal-card">
+            <div class="sal-row">
+              <div class="sal-lbl">Monthly Budget</div>
+              <div class="sal-pct" id="sal-pct-label">38% spent</div>
+            </div>
+            <div class="sal-bar-bg"><div class="sal-bar-fill" id="sal-bar" style="width:38%;"></div></div>
+            <div class="sal-info">
+              <div class="sal-small" id="sal-spent">Spent: ₹1,900</div>
+              <div class="sal-small" id="sal-remain">Left: ₹3,100</div>
+            </div>
+          </div>
+          <div class="qa">
+            <div class="qa-btn" onclick="nav('qr')"><div class="qa-ico" style="background:rgba(0,200,255,.1);">📷</div><div class="qa-lbl">Scan QR</div></div>
+            <div class="qa-btn" onclick="nav('send')"><div class="qa-ico" style="background:rgba(79,142,247,.1);">↗️</div><div class="qa-lbl">Send</div></div>
+            <div class="qa-btn" onclick="nav('expenses')"><div class="qa-ico" style="background:rgba(255,180,0,.1);">📊</div><div class="qa-lbl">Expenses</div></div>
+            <div class="qa-btn" onclick="nav('account')"><div class="qa-ico" style="background:rgba(159,122,234,.1);">👤</div><div class="qa-lbl">Account</div></div>
+          </div>
+          <div class="sec-title">Recent Activity</div>
+          <div class="tx-list" id="home-txlist">
+            <div class="txi" id="tx-new" style="display:none;">
+              <div class="txi-av" id="tx-new-av" style="background:rgba(79,142,247,.15);color:#4f8ef7;">?</div>
+              <div class="txi-inf"><div class="txi-name" id="tx-new-nm">—</div><div class="txi-time">↑ Sent · Just now</div></div>
+              <div class="txi-amt s" id="tx-new-amt">—</div>
+            </div>
+            <div class="txi"><div class="txi-av" style="background:rgba(0,200,255,.1);color:#00ccff;">B</div><div class="txi-inf"><div class="txi-name">bhupenderjangra8053</div><div class="txi-time">↑ Sent · 1h ago</div></div><div class="txi-amt s">−₹1.00</div></div>
+            <div class="txi"><div class="txi-av" style="background:rgba(0,232,122,.1);color:#00e87a;">R</div><div class="txi-inf"><div class="txi-name">Rahul Sharma</div><div class="txi-time">↓ Received · 3h ago</div></div><div class="txi-amt r">+₹500.00</div></div>
+            <div class="txi"><div class="txi-av" style="background:rgba(159,122,234,.1);color:#9f7aea;">A</div><div class="txi-inf"><div class="txi-name">Amazon Pay</div><div class="txi-time">↑ Sent · Yesterday</div></div><div class="txi-amt s">−₹349.00</div></div>
+            <div class="txi"><div class="txi-av" style="background:rgba(255,107,107,.1);color:#ff6b6b;">S</div><div class="txi-inf"><div class="txi-name">Swiggy</div><div class="txi-time">↑ Sent · 2 days ago</div></div><div class="txi-amt s">−₹156.00</div></div>
+          </div>
+          <div class="bnav">
+            <div class="bni on" onclick="nav('home')"><div class="bni-icon">🏠</div><div class="bni-label">Home</div></div>
+            <div class="bni" onclick="nav('send')"><div class="bni-icon">↗️</div><div class="bni-label">Send</div></div>
+            <div class="bni" onclick="nav('expenses')"><div class="bni-icon">📊</div><div class="bni-label">Expenses</div></div>
+            <div class="bni" onclick="nav('account')"><div class="bni-icon">👤</div><div class="bni-label">Account</div></div>
+          </div>
+        </div>
+
+        <!-- ═══ SEND ═══ -->
+        <div class="screen" id="screen-send">
+          <div class="scr-hdr"><div class="back" onclick="nav('home')">←</div><div class="scr-title">Send Money</div></div>
+          <div class="ig">
+            <div class="ilbl">Bank</div>
+            <select class="bank-select" id="bank-sel" onchange="onBankChange()">
+              <option value="sbi">🏦 SBI — SMS Balance (*99*13#)</option>
+              <option value="hdfc">🏛 HDFC — USSD Gateway (*99*3#)</option>
+              <option value="other">🔷 Other — Standard NUUP (*99#)</option>
+            </select>
+          </div>
+          <div class="ig"><div class="ilbl">UPI ID / VPA</div><input class="ifield" id="upi-in" placeholder="e.g. rahul@upi" oninput="buildUssdPrev()" /></div>
+          <div class="ig"><div class="ilbl">Amount (₹)</div><input class="ifield" id="amt-in" placeholder="0.00" type="number" min="1" oninput="buildUssdPrev()" /></div>
+          <div class="ussd-preview" id="ussd-prev"><span>USSD: </span>*99*1*3*•••@bank*•••*••••••#</div>
+          <div class="div-text">— or scan QR —</div>
+          <div class="qr-row" onclick="nav('qr')">📷 Scan QR Code (ML Kit)</div>
+          <div style="flex:1;"></div>
+          <button class="prc-btn" onclick="toPin()">Proceed via USSD →</button>
+        </div>
+
+        <!-- ═══ PIN ═══ -->
+        <div class="screen" id="screen-pin">
+          <div class="scr-hdr"><div class="back" onclick="nav('send')">←</div><div class="scr-title">Enter UPI PIN</div></div>
+          <div class="pin-sum">
+            <div class="pin-to">Sending to</div>
+            <div class="pin-rec" id="pr">rahul@upi</div>
+            <div class="pin-big" id="pa">₹200.00</div>
+            <div class="pin-bk" id="pin-bank-desc">via SBI • SMS + USSD • A/c ••••1234</div>
+          </div>
+          <div class="pin-lbl">Enter your 6-digit UPI PIN</div>
+          <div class="pdots">
+            <div class="pd" id="pd0"></div><div class="pd" id="pd1"></div><div class="pd" id="pd2"></div>
+            <div class="pd" id="pd3"></div><div class="pd" id="pd4"></div><div class="pd" id="pd5"></div>
+          </div>
+          <div class="kpad">
+            <div class="key" onclick="pk('1')">1</div><div class="key" onclick="pk('2')">2</div><div class="key" onclick="pk('3')">3</div>
+            <div class="key" onclick="pk('4')">4</div><div class="key" onclick="pk('5')">5</div><div class="key" onclick="pk('6')">6</div>
+            <div class="key" onclick="pk('7')">7</div><div class="key" onclick="pk('8')">8</div><div class="key" onclick="pk('9')">9</div>
+            <div class="key del" onclick="pdel()">⌫</div><div class="key" onclick="pk('0')">0</div><div class="key ok" onclick="okPin()">✓</div>
+          </div>
+          <div style="text-align:center;font-size:10px;color:var(--muted);padding-bottom:10px;font-family:'JetBrains Mono',monospace;">🔐 OWASP MASVS-CRYPTO · PIN zeroed after use</div>
+        </div>
+
+        <!-- ═══ PROCESSING ═══ -->
+        <div class="screen" id="screen-processing">
+          <div class="proc-body">
+            <div class="ussd-spin"></div>
+            <div class="proc-title">USSD Session Active</div>
+            <div class="proc-sub" id="proc-sub">Initialising...</div>
+            <div class="mini-log" id="mini-log"></div>
+          </div>
+        </div>
+
+        <!-- ═══ SUCCESS ═══ -->
+        <div class="screen" id="screen-success">
+          <div class="succ-body">
+            <div class="succ-ring">✓</div>
+            <div class="succ-title">Payment Sent!</div>
+            <div class="succ-amt" id="s-amt">₹200.00</div>
+            <div class="succ-to" id="s-to">to rahul@upi</div>
+            <div class="succ-ref">
+              <div class="ref-lbl">Transaction Reference</div>
+              <div class="ref-val" id="s-ref">SBI240327001234</div>
+            </div>
+            <div class="succ-ref" style="margin-top:0;">
+              <div class="ref-lbl">Route Used</div>
+              <div class="ref-val" id="s-route">USSD *99*1*3# → NPCI NUUP → SBI</div>
+            </div>
+            <div class="sms-ok">✓ SMS debit alert parsed in <strong id="s-time" style="margin-left:4px;">2.3s</strong></div>
+            <button class="done-btn" onclick="nav('home')">Done</button>
+          </div>
+        </div>
+
+        <!-- ═══ EXPENSES ═══ -->
+        <div class="screen" id="screen-expenses">
+          <div class="scr-hdr"><div class="back" onclick="nav('home')">←</div><div class="scr-title">Expense Tracker</div></div>
+          <div class="exp-hdr-info">
+            <div class="exp-card">
+              <div class="exp-card-lbl">Monthly Salary</div>
+              <div class="exp-card-val" id="exp-salary" style="color:var(--green);">₹5,000</div>
+            </div>
+            <div class="exp-card">
+              <div class="exp-card-lbl">Spent</div>
+              <div class="exp-card-val" id="exp-spent-val" style="color:var(--red);">₹1,900</div>
+            </div>
+            <div class="exp-card">
+              <div class="exp-card-lbl">Remaining</div>
+              <div class="exp-card-val" id="exp-rem-val" style="color:var(--yellow);">₹3,100</div>
+            </div>
+          </div>
+          <div class="exp-ring-wrap">
+            <div class="exp-ring-outer">
+              <svg width="160" height="160" viewBox="0 0 160 160">
+                <circle cx="80" cy="80" r="65" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="14"/>
+                <circle cx="80" cy="80" r="65" fill="none" stroke="url(#expGrad)" stroke-width="14" stroke-linecap="round"
+                  stroke-dasharray="408.41" id="exp-arc" stroke-dashoffset="253.21"/>
+                <defs>
+                  <linearGradient id="expGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#00e87a"/>
+                    <stop offset="100%" stop-color="#ffb400"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="exp-ring-center">
+                <div class="exp-pct" id="exp-pct-big" style="color:var(--yellow);">38%</div>
+                <div class="exp-pct-lbl">of budget</div>
+              </div>
+            </div>
+          </div>
+          <div class="exp-cats" id="exp-cats"></div>
+          <div style="padding:10px 14px 14px;">
+            <button class="prc-btn green" onclick="openSalModal()">⚙ Set Salary / Budget</button>
+          </div>
+        </div>
+
+        <!-- ═══ ACCOUNT ═══ -->
+        <div class="screen" id="screen-account">
+          <div class="scr-hdr"><div class="back" onclick="nav('home')">←</div><div class="scr-title">Account</div></div>
+          <div class="acc-hdr">
+            <div class="acc-av">N</div>
+            <div class="acc-name">Nishant Kumar</div>
+            <div class="acc-upi">nishant@sbi</div>
+            <div class="acc-bank-pills">
+              <span class="acc-bank-pill bank-tag">SBI ••••1234</span>
+              <span class="acc-bank-pill hdfc-tag">HDFC ••••5678</span>
+            </div>
+          </div>
+          <div class="svc-list">
+            <div class="svc" onclick="doBalance()">
+              <div class="svc-ico">💰</div>
+              <div class="svc-inf"><div class="svc-nm">Check Balance</div><div class="svc-desc">SBI: SMS 09223766666 | HDFC: *99*3#</div></div>
+              <div class="svc-arr">›</div>
+            </div>
+            <div class="svc" onclick="doChangePin()">
+              <div class="svc-ico">🔐</div>
+              <div class="svc-inf"><div class="svc-nm">Change UPI PIN</div><div class="svc-desc">USSD *99*7# · OWASP-compliant</div></div>
+              <div class="svc-arr">›</div>
+            </div>
+            <div class="svc" onclick="doRequest()">
+              <div class="svc-ico">📨</div>
+              <div class="svc-inf"><div class="svc-nm">Request Money</div><div class="svc-desc">UPI collect request via NUUP</div></div>
+              <div class="svc-arr">›</div>
+            </div>
+            <div class="svc" onclick="nav('language')">
+              <div class="svc-ico">🌍</div>
+              <div class="svc-inf"><div class="svc-nm">Language</div><div class="svc-desc">8 languages · Hindi, Marathi, Urdu…</div></div>
+              <div class="svc-arr">›</div>
+            </div>
+            <div class="svc" onclick="openSalModal()">
+              <div class="svc-ico">💼</div>
+              <div class="svc-inf"><div class="svc-nm">Salary / Budget Setup</div><div class="svc-desc">Auto-deduction · spending tracker</div></div>
+              <div class="svc-arr">›</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ QR ═══ -->
+        <div class="screen" id="screen-qr">
+          <div class="scr-hdr"><div class="back" onclick="nav('home')">←</div><div class="scr-title">Scan QR</div></div>
+          <div class="qr-body">
+            <div class="qr-finder">
+              <div class="cam-feed"><div class="fake-qr" id="fqr"></div></div>
+              <div class="scan-line"></div>
+              <div class="corner c-tl"></div><div class="corner c-tr"></div>
+              <div class="corner c-bl"></div><div class="corner c-br"></div>
+            </div>
+            <div class="qr-hint">Vision Camera Frame Processor · 30fps</div>
+            <div class="qr-engine-info">
+              <div>🔬 Engine: <span>ML Kit BarcodeScanning</span></div>
+              <div>⚡ Thread: <span>VisionCamera Worklet (native)</span></div>
+              <div>🎯 Extracts: <span>UPI VPA + Amount → USSD builder</span></div>
+            </div>
+            <button class="prc-btn" onclick="simQR()" style="margin:0;width:100%;">🎯 Simulate QR Scan</button>
+          </div>
+        </div>
+
+        <!-- ═══ BALANCE RESULT ═══ -->
+        <div class="screen" id="screen-balance">
+          <div class="scr-hdr"><div class="back" onclick="nav('account')">←</div><div class="scr-title">Account Balance</div></div>
+          <div class="bal-res">
+            <div style="font-size:48px;">🏦</div>
+            <div style="font-size:13px;font-weight:700;" id="bal-bank-name">State Bank of India</div>
+            <div style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;" id="bal-acno">A/c ••••1234</div>
+            <div style="font-size:38px;font-weight:800;font-family:'JetBrains Mono',monospace;" id="bal-disp">₹1,000.00</div>
+            <div style="font-size:11px;color:var(--green);" id="bal-method">✓ Fetched via SMS → 09223766666 (SBIPSG)</div>
+            <div style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;">Regex template matched · 98% confidence</div>
+            <button class="done-btn" onclick="nav('account')">Back to Account</button>
+          </div>
+        </div>
+
+        <!-- ═══ LANGUAGE ═══ -->
+        <div class="screen" id="screen-language">
+          <div class="scr-hdr"><div class="back" onclick="nav('account')">←</div><div class="scr-title">Language / भाषा</div></div>
+          <div style="padding:0 18px 12px;font-size:11px;color:var(--muted);">Select your preferred language for EdgePay</div>
+          <div class="lang-grid" id="lang-grid"></div>
+        </div>
+
+      </div><!-- /screen-wrap -->
+    </div><!-- /phone -->
+
+    <!-- Salary Modal (overlaid on phone) -->
+    <div id="sal-modal" style="display:none;position:absolute;inset:0;z-index:200;">
+      <div class="modal-overlay" onclick="closeSalModal(event)">
+        <div class="modal-sheet" onclick="event.stopPropagation()">
+          <div class="modal-handle"></div>
+          <div class="modal-title">⚙ Salary / Budget Setup</div>
+          <div class="modal-row">
+            <div class="modal-lbl">Monthly Salary / Pocket Money (₹)</div>
+            <input class="modal-input" id="sal-input" placeholder="e.g. 5000" type="number" value="5000"/>
+          </div>
+          <div class="modal-row">
+            <div class="modal-lbl">Already Spent this Month (₹)</div>
+            <input class="modal-input" id="spent-input" placeholder="e.g. 1900" type="number" value="1900"/>
+          </div>
+          <button class="modal-save" onclick="saveSalary()">💾 Save & Auto-Deduct</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick action hints -->
+    <div class="hints">
+      <div class="hbtn" onclick="quickSend()">⚡ Send ₹200</div>
+      <div class="hbtn g" onclick="quickBal()">💰 Balance</div>
+      <div class="hbtn y" onclick="openSalModal()">💼 Budget</div>
+      <div class="hbtn" onclick="nav('qr')">📷 QR Scan</div>
+      <div class="hbtn p" onclick="nav('language')">🌍 Language</div>
+      <div class="hbtn" onclick="nav('expenses')">📊 Expenses</div>
+    </div>
+  </div>
+
+  <!-- TERMINAL PANEL -->
+  <div class="term-panel">
+
+    <!-- Feature Cards -->
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-ico">📡</div>
+        <div class="feat-inf"><div class="feat-nm">GSM/USSD</div><div class="feat-ds">Zero internet · 2G only · NPCI *99# NUUP</div></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-ico">🏦</div>
+        <div class="feat-inf"><div class="feat-nm">Adaptive Bank</div><div class="feat-ds">SBI: SMS 09223766666 · HDFC: *99*3#</div></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-ico">📷</div>
+        <div class="feat-inf"><div class="feat-nm">Offline QR</div><div class="feat-ds">VisionCamera frame processor · ML Kit</div></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-ico">🌍</div>
+        <div class="feat-inf"><div class="feat-nm">Multi-Language</div><div class="feat-ds">Hindi · Marathi · Urdu · Punjabi + 4 more</div></div>
+      </div>
+    </div>
+
+    <!-- Network Status -->
+    <div class="net-box">
+      <div class="box-title">⬡ Network Status</div>
+      <div class="net-row">
+        <div class="ni"><div class="ni-lbl">GSM RADIO</div><div class="ni-val ok" id="n-gsm">READY</div><div class="sig"><div class="sb" style="height:3px;"></div><div class="sb" style="height:6px;"></div><div class="sb" style="height:9px;"></div><div class="sb" style="height:12px;"></div></div></div>
+        <div class="ni"><div class="ni-lbl">NPCI GW</div><div class="ni-val idle" id="n-npci">IDLE</div></div>
+        <div class="ni"><div class="ni-lbl">BANK SMS</div><div class="ni-val ok" id="n-bank">ONLINE</div></div>
+        <div class="ni"><div class="ni-lbl">SMS ENGINE</div><div class="ni-val idle" id="n-sms">IDLE</div></div>
+      </div>
+    </div>
+
+    <!-- Payment Flow Steps -->
+    <div class="flow-box">
+      <div class="box-title">Payment Flow — USSDBuilder.ts → Kotlin Bridge</div>
+      <div class="steps">
+        <div class="step" id="st0"><div class="sn">1</div><div class="st">UPI VPA Validated</div></div>
+        <div class="step" id="st1"><div class="sn">2</div><div class="st">USSDBuilder constructs *99# string</div></div>
+        <div class="step" id="st2"><div class="sn">3</div><div class="st">UssdModule.kt dispatches GSM call</div></div>
+        <div class="step" id="st3"><div class="sn">4</div><div class="st">NPCI NUUP handshake + TXN</div></div>
+        <div class="step" id="st4"><div class="sn">5</div><div class="st">SmsParser.ts matches debit alert</div></div>
+        <div class="step" id="st5"><div class="sn">6</div><div class="st">Payment confirmed · PIN zeroed ✓</div></div>
+      </div>
+    </div>
+
+    <!-- Terminal -->
+    <div class="terminal">
+      <div class="term-hdr">
+        <div class="td r"></div><div class="td y"></div><div class="td g"></div>
+        <div class="term-name">edgepay@backend — engine v2.0.0 | USSDBuilder · SmsParser · SmsService</div>
+        <div class="term-clr" onclick="clearTerm()">clear</div>
+      </div>
+      <div class="term-body" id="terminal">
+        <div class="lg">
+          <div class="lc"><span class="lts">09:05:00</span><span class="lcomp sys">SYS</span><span class="ldollar">$</span><span class="lact">engine_boot_v2</span></div>
+          <div class="ldet">
+            <div class="ldl"><span class="ar">→</span><span class="v">EdgePay v2.0.0 — Offline Financial Engine</span></div>
+            <div class="ldl"><span class="ar">→</span><span class="k">USSD bridge:</span> <span class="v g">UssdModule.kt loaded</span></div>
+            <div class="ldl"><span class="ar">→</span><span class="k">SMS parser:</span> <span class="v g">SmsParser.ts · 12 bank templates</span></div>
+            <div class="ldl"><span class="ar">→</span><span class="k">SBI logic:</span> <span class="v b">SMS → 09223766666 (SBIPSG)</span></div>
+            <div class="ldl"><span class="ar">→</span><span class="k">HDFC logic:</span> <span class="v p">USSD *99*3# gateway</span></div>
+            <div class="ldl"><span class="ar">→</span><span class="k">QR engine:</span> <span class="v g">VisionCamera · ML Kit 30fps</span></div>
+            <div class="ldl"><span class="ar">→</span><span class="k">Zustand store:</span> <span class="v g">offline-optimised state sync</span></div>
+            <div class="ldl"><span class="ar">→</span><span class="k">Languages:</span> <span class="v y">8 locales loaded</span></div>
+            <div class="ldl"><span class="ar">→</span><span class="k">OWASP MASVS:</span> <span class="v g">PIN zeroing enabled</span></div>
+            <div class="ldl"><span class="ar">→</span><span class="k">Widgets:</span> <span class="v g">HomeStatus · SavingsGoal · ExpenseTracker</span></div>
+          </div>
+        </div>
+        <div style="color:rgba(255,255,255,.15);font-size:10px;font-family:'JetBrains Mono',monospace;margin-bottom:8px;">
+          ↑ Interact with the phone to see live backend logs
+        </div>
+        <span class="cur"></span>
+      </div>
+    </div>
+  </div><!-- /term-panel -->
+
+</div><!-- /main -->
+
+<script>
+// ═══════════════════════════════
+// STATE
+// ═══════════════════════════════
+const S = {
+  screen:'home', upi:'', amount:'', pin:'', balance:1000, masked:true,
+  bank:'sbi', salary:5000, spent:1900,
+  lang:'English',
+  txs:[
+    {nm:'bhupenderjangra8053',upi:'bhupender@sbi',type:'s',amt:1.00,time:'1h ago',i:'B',c:'#00ccff'},
+    {nm:'Rahul Sharma',upi:'rahul@upi',type:'r',amt:500.00,time:'3h ago',i:'R',c:'#00e87a'},
+    {nm:'Amazon Pay',upi:'amazon@icici',type:'s',amt:349.00,time:'Yesterday',i:'A',c:'#9f7aea'},
+    {nm:'Swiggy',upi:'swiggy@hdfc',type:'s',amt:156.00,time:'2 days ago',i:'S',c:'#ff6b6b'},
+    {nm:'Mom',upi:'sunita@sbi',type:'r',amt:2000.00,time:'3 days ago',i:'M',c:'#ff6b9d'},
+  ],
+  cats:[
+    {nm:'Food & Dining',ico:'🍛',spent:756,pct:40,col:'#ff8c42'},
+    {nm:'Transport',ico:'🚌',spent:349,pct:18,col:'#4f8ef7'},
+    {nm:'Shopping',ico:'🛍',spent:500,pct:26,col:'#9f7aea'},
+    {nm:'Utilities',ico:'⚡',spent:295,pct:16,col:'#ffb400'},
+  ]
+};
+let pinVal='';
+
+const LANGS=[
+  {native:'हिंदी',en:'Hindi',flag:'🇮🇳'},
+  {native:'मराठी',en:'Marathi',flag:'🇮🇳'},
+  {native:'اردو',en:'Urdu',flag:'🇵🇰'},
+  {native:'ਪੰਜਾਬੀ',en:'Punjabi',flag:'🇮🇳'},
+  {native:'বাংলা',en:'Bengali',flag:'🇧🇩'},
+  {native:'ಕನ್ನಡ',en:'Kannada',flag:'🇮🇳'},
+  {native:'ଓଡ଼ିଆ',en:'Odia',flag:'🇮🇳'},
+  {native:'English',en:'English',flag:'🇬🇧'},
+];
+
+// ═══════════════════════════════
+// INIT
+// ═══════════════════════════════
+function init(){
+  renderExpCats();
+  renderLangs();
+  updateSalCard();
+  tick();
+}
+
+// ═══════════════════════════════
+// CLOCK
+// ═══════════════════════════════
+function tick(){
+  const n=new Date(),h=n.getHours(),m=n.getMinutes().toString().padStart(2,'0');
+  document.getElementById('clock').textContent=`${h>12?h-12:h||12}:${m}`;
+}
+tick(); setInterval(tick,30000);
+
+// ═══════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════
+function nav(sc){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById('screen-'+sc);
+  if(el){el.classList.add('active');S.screen=sc;}
+  if(sc==='history')renderHist();
+  if(sc==='send'){log('edge','navigate_send',[['→','UPI send form','opened','b'],['→','USSDBuilder','ready','g'],['→','Bank',S.bank.toUpperCase(),'p']]);buildUssdPrev();}
+  if(sc==='language')log('lang','language_screen',[['→','locales','8 loaded','g'],['→','current',S.lang,'b']]);
+  if(sc==='expenses'){updateExpScreen();log('sal','expense_tracker',[['→','salary',`₹${S.salary}`,'g'],['→','spent',`₹${S.spent}`,'y'],['→','remaining',`₹${S.salary-S.spent}`,'g']]);}
+  // update bnav
+  document.querySelectorAll('.bni').forEach(b=>b.classList.remove('on'));
+  const bnMap={home:0,send:1,expenses:2,account:3};
+  if(bnMap[sc]!==undefined){const bnav=document.querySelectorAll('#screen-home .bni');if(bnav[bnMap[sc]])bnav[bnMap[sc]].classList.add('on');}
+}
+
+// ═══════════════════════════════
+// BALANCE MASKING
+// ═══════════════════════════════
+function toggleMask(){
+  S.masked=!S.masked;
+  const el=document.getElementById('disp-bal');
+  const btn=document.getElementById('mask-toggle');
+  el.textContent=S.masked?'₹ ******':`₹${S.balance.toFixed(2)}`;
+  btn.textContent=S.masked?'👁':'🙈';
+  log('edge','balance_mask_toggle',[['→','masked',String(S.masked),'b'],['→','security','Dashboard privacy mode','g']]);
+}
+
+// ═══════════════════════════════
+// BANK CHANGE (Adaptive Logic)
+// ═══════════════════════════════
+function onBankChange(){
+  S.bank=document.getElementById('bank-sel').value;
+  const descMap={sbi:'SBI: SMS → 09223766666 (SBIPSG regex)',hdfc:'HDFC: USSD *99*3# gateway',other:'Standard NUUP *99#'};
+  const tagMap={sbi:'SBI',hdfc:'HDFC',other:'Other'};
+  const acMap={sbi:'1234',hdfc:'5678',other:'••••'};
+  document.getElementById('home-bank-tag').textContent=tagMap[S.bank];
+  document.getElementById('home-bank-tag').className='bank-tag'+(S.bank==='hdfc'?' hdfc-tag':'');
+  document.getElementById('home-acno').textContent=acMap[S.bank];
+  document.getElementById('pin-bank-desc').textContent=`via ${tagMap[S.bank]} • ${descMap[S.bank]}`;
+  log('edge','bank_switch',[['→','bank',S.bank.toUpperCase(),'b'],['→','logic',descMap[S.bank],'g'],['→','SmsParser','re-configuring templates','y']]);
+  buildUssdPrev();
+}
+
+// ═══════════════════════════════
+// USSD PREVIEW BUILDER
+// ═══════════════════════════════
+function buildUssdPrev(){
+  const upi=document.getElementById('upi-in').value||'vpa@bank';
+  const amt=document.getElementById('amt-in').value||'0.00';
+  const ussd=`*99*1*3*${upi}*${amt}*••••••#`;
+  document.getElementById('ussd-prev').innerHTML=`<span>USSDBuilder.ts: </span>${ussd}`;
+}
+
+// ═══════════════════════════════
+// TERMINAL LOGGING
+// ═══════════════════════════════
+function ts(){const n=new Date();return`${n.getHours().toString().padStart(2,'0')}:${n.getMinutes().toString().padStart(2,'0')}:${n.getSeconds().toString().padStart(2,'0')}`;}
+
+function log(comp,action,details=[],ms=0){
+  return new Promise(r=>setTimeout(()=>{
+    const T=document.getElementById('terminal');
+    const cur=T.querySelector('.cur');
+    const g=document.createElement('div'); g.className='lg';
+    g.innerHTML=`<div class="lc"><span class="lts">${ts()}</span><span class="lcomp ${comp}">${comp.toUpperCase()}</span><span class="ldollar">$</span><span class="lact">${action}</span></div>`;
+    if(details.length){
+      const dd=document.createElement('div'); dd.className='ldet';
+      details.forEach(d=>{
+        const l=document.createElement('div'); l.className='ldl';
+        if(typeof d==='string'){l.innerHTML=`<span class="ar">→</span><span class="v">${d}</span>`;}
+        else{const[ar,k,v,c]=d;l.innerHTML=k&&v?`<span class="ar">${ar}</span><span class="k">${k}:</span> <span class="v ${c||''}">${v}</span>`:`<span class="ar">${ar}</span><span class="v ${c||''}">${k}</span>`;}
+        dd.appendChild(l);
+      });
+      g.appendChild(dd);
+    }
+    cur?T.insertBefore(g,cur):T.appendChild(g);
+    T.scrollTop=T.scrollHeight; r();
+  },ms));
+}
+
+function clearTerm(){document.getElementById('terminal').innerHTML='<span class="cur"></span>';resetSteps();resetNet();}
+
+// ═══════════════════════════════
+// NETWORK STATUS
+// ═══════════════════════════════
+function setNet(id,val,cls){const e=document.getElementById(id);if(e){e.textContent=val;e.className='ni-val '+cls;}}
+function resetNet(){setNet('n-gsm','READY','ok');setNet('n-npci','IDLE','idle');setNet('n-bank','ONLINE','ok');setNet('n-sms','IDLE','idle');}
+function sigAnim(on){document.querySelectorAll('.sb').forEach(b=>{b.style.background=on?'#00e87a':'';b.className='sb'+(on?'':' off');});}
+
+// ═══════════════════════════════
+// FLOW STEPS
+// ═══════════════════════════════
+function setStep(i,st){
+  const e=document.getElementById('st'+i);if(!e)return;
+  e.className='step '+st;
+  e.querySelector('.sn').textContent=st==='done'?'✓':(i+1);
+}
+function resetSteps(){for(let i=0;i<6;i++){const e=document.getElementById('st'+i);if(e){e.className='step';e.querySelector('.sn').textContent=i+1;}}}
+
+// ═══════════════════════════════
+// SEND / PIN
+// ═══════════════════════════════
+function toPin(){
+  let u=document.getElementById('upi-in').value||'rahul@upi';
+  let a=document.getElementById('amt-in').value||'200';
+  document.getElementById('upi-in').value=u; document.getElementById('amt-in').value=a;
+  S.upi=u; S.amount=a; pinVal=''; updDots(); resetSteps();
+  document.getElementById('pr').textContent=u;
+  document.getElementById('pa').textContent='₹'+parseFloat(a).toFixed(2);
+  setStep(0,'active');
+  log('edge','validate_vpa',[['→','input',u,'b'],['→','regex','alphanumeric@bank validated','g'],['→','result','VPA VALID ✓','g']]);
+  setTimeout(()=>setStep(0,'done'),400);
+  nav('pin');
+}
+
+function pk(d){if(pinVal.length>=6)return; pinVal+=d; updDots(); if(pinVal.length===1)log('edge','pin_capture',[['→','native','Kotlin NativeModule (CharArray)','g'],['→','storage','Never stored in JS heap','g'],['→','owasp','MASVS-CRYPTO compliant','b']]);}
+function pdel(){pinVal=pinVal.slice(0,-1); updDots();}
+function updDots(){for(let i=0;i<6;i++){const e=document.getElementById('pd'+i);if(e)e.className='pd'+(i<pinVal.length?' on':'');}}
+
+function okPin(){
+  while(pinVal.length<6) pinVal+=Math.floor(Math.random()*10);
+  updDots(); setTimeout(()=>runPayment(),400);
+}
+
+// ═══════════════════════════════
+// MINI-LOG
+// ═══════════════════════════════
+function mlog(txt){
+  const e=document.getElementById('mini-log');if(!e)return;
+  const l=document.createElement('div');l.className='mll';l.textContent=txt;
+  e.appendChild(l);e.scrollTop=e.scrollHeight;
+}
+
+// ═══════════════════════════════
+// PAYMENT SIMULATION
+// ═══════════════════════════════
+async function runPayment(){
+  const rec=S.upi||'rahul@upi';
+  const amt=parseFloat(S.amount||'200').toFixed(2);
+  const vpa=rec.replace('@','%40');
+  const ussdRaw=`*99*1*3*${rec}*${amt}*${pinVal}#`;
+  const ussdEnc=`tel:*99*1*3*${vpa}*${amt}*••••••%23`;
+  const isSBI=S.bank==='sbi';
+
+  nav('processing');
+  document.getElementById('mini-log').innerHTML='';
+  document.getElementById('proc-sub').textContent='Building USSD command...';
+
+  // Step 2 — USSD build
+  setStep(1,'active');
+  await log('ussd','build_string',[
+    ['→','USSDBuilder.ts','constructing NUUP string','b'],
+    ['→','recipient',rec,'b'],['→','amount',`₹${amt}`,'y'],
+    ['→','bank',S.bank.toUpperCase(),''],
+    ['→','raw_ussd',ussdRaw.replace(pinVal,'••••••'),''],
+    ['→','encoded',ussdEnc,'g']
+  ]);
+  mlog('→ ussd $ USSDBuilder.build()'); mlog(`  *99*1*3*${rec}*${amt}*••••••#`); mlog(`  → tel: URI encoded`);
+  await w(500); setStep(1,'done');
+
+  // Step 3 — GSM dial
+  setStep(2,'active'); setNet('n-gsm','DIALING','act'); sigAnim(true);
+  await log('tel','ussd_module_dispatch',[
+    ['→','method','UssdModule.kt → startActivity(ACTION_CALL)',''],
+    ['→','uri',ussdEnc.substring(0,34)+'...','b'],
+    ['→','permission','CALL_PHONE granted (runtime)','g'],
+    ['→','bridge','React Native ↔ Kotlin NativeModule','g']
+  ]);
+  mlog('→ tel  $ UssdModule.dialUssd()'); mlog(`  ACTION_CALL dispatched → GSM`);
+  document.getElementById('proc-sub').textContent='GSM session opening via 2G...';
+  await w(700); setStep(2,'done'); setNet('n-gsm','SESSION','act');
+
+  // Step 4 — NPCI handshake
+  setStep(3,'active'); setNet('n-npci','ACTIVE','act');
+  const sid=`NPCI-${Date.now().toString().slice(-8)}`;
+  await log('npci','nuup_handshake',[
+    ['→','gateway','nuup.org.in (National Unified USSD Platform)',''],
+    ['→','protocol','USSD Phase 2 · *99# infrastructure',''],
+    ['→','bank_routing',`${S.bank.toUpperCase()} IFIN confirmed`,'g'],
+    ['→','session_id',sid,'y']
+  ]);
+  mlog('→ npci $ NUUP gateway connected'); mlog(`  session: ${sid}`);
+  document.getElementById('proc-sub').textContent='NPCI processing payment...';
+  await w(800);
+
+  const txRef=`${S.bank.toUpperCase()}${new Date().toISOString().slice(2,10).replace(/-/g,'')}${(Math.random()*900000+100000|0)}`;
+  await log('npci','txn_result',[
+    ['→','txn_ref',txRef,'y'],
+    ['→','debit',`A/c ••••${S.bank==='hdfc'?'5678':'1234'} (${S.bank.toUpperCase()})` ,''],
+    ['→','credit_vpa',rec,'b'],
+    ['→','amount',`₹${amt}`,''],
+    ['→','status','TXN_SUCCESS','g']
+  ]);
+  mlog(`  TXN: ${txRef} → SUCCESS`);
+  setStep(3,'done'); setNet('n-npci','SUCCESS','ok');
+  await w(400);
+
+  // Step 5 — SMS parse (SBI: SMS from SBIPSG, HDFC: USSD response)
+  setStep(4,'active'); setNet('n-sms','LISTENING','act');
+  if(isSBI){
+    await log('sms','sbi_broadcast_receiver',[
+      ['→','action','android.provider.Telephony.SMS_RECEIVED',''],
+      ['→','sender','AD-SBIPSG-S (09223766666 reply)','y'],
+      ['→','SmsParser.ts','template_SBI_v3 matching…','g']
+    ]);
+  } else {
+    await log('sms','hdfc_ussd_response',[
+      ['→','source','USSD *99*3# response string',''],
+      ['→','SmsParser.ts','template_HDFC_v2 matching…','g']
+    ]);
+  }
+  mlog(`→ sms  $ SmsParser.parse() listening...`);
+  document.getElementById('proc-sub').textContent='Awaiting bank confirmation...';
+  await w(900);
+
+  const rawSms=`A/c X${S.bank==='hdfc'?'5678':'1234'} debited Rs.${amt} on ${new Date().toLocaleDateString('en-IN')}. UPI Ref ${txRef}. If not done call 18001234567`;
+  await log('sms','debit_alert_parsed',[
+    ['→','raw',`"${rawSms.substring(0,44)}..."` ,''],
+    ['→','template',`template_${S.bank.toUpperCase()}_v3 matched`,'g'],
+    ['→','extracted_amt',`₹${amt}`,'g'],
+    ['→','extracted_ref',txRef,'g'],
+    ['→','confidence','97%','g'],
+    ['→','parse_time','38ms','']
+  ]);
+  mlog(`→ sms  $ debit alert parsed ✓`); mlog(`  ₹${amt} · ref: ${txRef}`);
+  setStep(4,'done'); setNet('n-sms','PARSED','ok');
+  await w(350);
+
+  // Step 6 — Confirmed
+  setStep(5,'active');
+  const totalMs=1600+Math.random()*900|0;
+  const totalS=(totalMs/1000).toFixed(1)+'s';
+  await log('edge','payment_confirmed',[
+    ['→','status','✓ SUCCESS','g'],
+    ['→','amount',`₹${amt} debited`,'g'],
+    ['→','recipient',rec,'b'],
+    ['→','txn_ref',txRef,''],
+    ['→','total_time',totalS,'g'],
+    ['→','storage','Encrypted SQLite local write','g'],
+    ['→','zustand','store.txHistory.unshift(txn)','b'],
+    ['→','pin_memory','CharArray.fill(\\0) — OWASP MASVS-CRYPTO','g']
+  ]);
+  setStep(5,'done'); setNet('n-gsm','READY','ok'); setNet('n-npci','IDLE','idle'); setNet('n-sms','IDLE','idle'); sigAnim(false);
+
+  // Update state
+  S.balance=Math.max(0,S.balance-parseFloat(amt));
+  S.spent=Math.min(S.salary,S.spent+parseFloat(amt));
+  updateSalCard();
+  document.getElementById('disp-bal').textContent=S.masked?'₹ ******':`₹${S.balance.toFixed(2)}`;
+  S.txs.unshift({nm:rec,upi:rec,type:'s',amt:parseFloat(amt),time:'Just now',i:rec[0].toUpperCase(),c:'#4f8ef7'});
+  document.getElementById('tx-new').style.display='flex';
+  document.getElementById('tx-new-av').textContent=rec[0].toUpperCase();
+  document.getElementById('tx-new-nm').textContent=rec;
+  document.getElementById('tx-new-amt').textContent=`−₹${amt}`;
+  document.getElementById('s-amt').textContent=`₹${amt}`;
+  document.getElementById('s-to').textContent=`to ${rec}`;
+  document.getElementById('s-ref').textContent=txRef;
+  document.getElementById('s-time').textContent=totalS;
+  document.getElementById('s-route').textContent=isSBI?`SMS → 09223766666 → SBIPSG → SBI`:`USSD *99*3# → NPCI → HDFC`;
+  pinVal=''; updDots();
+  await w(300); nav('success');
+}
+
+function w(ms){return new Promise(r=>setTimeout(r,ms));}
+
+// ═══════════════════════════════
+// BALANCE CHECK (Adaptive: SBI vs HDFC)
+// ═══════════════════════════════
+async function doBalance(){
+  nav('processing'); document.getElementById('mini-log').innerHTML='';
+  const isSBI=S.bank==='sbi';
+  document.getElementById('proc-sub').textContent=isSBI?'Sending SMS to 09223766666...':'Dialing USSD *99*3#...';
+  resetSteps();
+  if(isSBI){
+    await log('sms','sbi_balance_request',[['→','action','Send SMS "BAL" → 09223766666','b'],['→','type','SBI SMS Balance Fetch','g']]);
+    mlog('→ sms  $ Send: BAL → 09223766666');
+    setNet('n-sms','SENDING','act'); await w(600);
+    await log('sms','sbipsg_response',[['→','sender','AD-SBIPSG-S','y'],['→','raw','"Avl Bal INR 1000.00 A/c X1234"',''],['→','SmsParser','regex SBIPSG_v2 matched','g'],['→','balance',`₹${S.balance.toFixed(2)}`,'g']]);
+    mlog(`→ sms  $ SBIPSG response parsed ✓`); mlog(`  Balance: ₹${S.balance.toFixed(2)}`);
+    setNet('n-sms','PARSED','ok');
+    document.getElementById('bal-bank-name').textContent='State Bank of India';
+    document.getElementById('bal-acno').textContent='A/c ••••1234';
+    document.getElementById('bal-method').textContent='✓ SMS → 09223766666 · SmsParser.ts (SBIPSG regex)';
+  } else {
+    await log('ussd','hdfc_balance_ussd',[['→','ussd_string','*99*3#','b'],['→','service','HDFC Balance via USSD Gateway','g']]);
+    mlog('→ ussd $ dial *99*3# (HDFC balance)');
+    setNet('n-gsm','DIALING','act'); await w(800); setNet('n-npci','ACTIVE','act');
+    await log('npci','hdfc_balance_response',[['→','bank','HDFC Bank',''],['→','account','••••5678',''],['→','balance',`₹${S.balance.toFixed(2)}`,'g']]);
+    mlog(`→ npci $ HDFC balance: ₹${S.balance.toFixed(2)} ✓`);
+    setNet('n-gsm','READY','ok'); setNet('n-npci','IDLE','idle');
+    document.getElementById('bal-bank-name').textContent='HDFC Bank';
+    document.getElementById('bal-acno').textContent='A/c ••••5678';
+    document.getElementById('bal-method').textContent='✓ USSD *99*3# → NPCI Gateway';
+  }
+  document.getElementById('bal-disp').textContent=`₹${S.balance.toFixed(2)}`;
+  nav('balance');
+}
+
+async function doChangePin(){
+  resetSteps();
+  await log('edge','change_upi_pin',[['→','ussd_string','*99*7#','b'],['→','service','UPI PIN Reset via NPCI',''],['→','owasp','PIN never stored in EdgePay store','g']]);
+  toast('screen-account','🔐 PIN change USSD *99*7# session opened','rgba(0,232,122,.1)','rgba(0,232,122,.3)','var(--green)');
+}
+
+async function doRequest(){
+  await log('edge','request_money',[['→','ussd_string','*99*5#','b'],['→','action','UPI Collect Request via NUUP',''],['→','delivery','NPCI push to payee','g']]);
+  toast('screen-account','📨 Collect request sent via NPCI NUUP','rgba(79,142,247,.1)','rgba(79,142,247,.3)','var(--blue)');
+}
+
+function toast(scr,msg,bg,bord,col){
+  const t=document.createElement('div'); t.className='toast';
+  t.style.cssText=`background:${bg};border:1px solid ${bord};color:${col};`;
+  t.textContent=msg;
+  const s=document.getElementById('screen-'+scr.replace('screen-',''));
+  if(!s){const ss=document.querySelector('.screen.active');if(ss){ss.appendChild(t);setTimeout(()=>t.remove(),3000);} return;}
+  s.appendChild(t); setTimeout(()=>t.remove(),3000);
+}
+
+// ═══════════════════════════════
+// QR SCAN
+// ═══════════════════════════════
+function buildQR(){
+  const g=document.getElementById('fqr'); if(!g)return; g.innerHTML='';
+  for(let i=0;i<81;i++){const c=document.createElement('div');c.className='fqc';c.style.background=Math.random()>.5?'rgba(255,255,255,.9)':'rgba(0,0,0,0)';g.appendChild(c);}
+}
+buildQR(); setInterval(buildQR,2500);
+
+async function simQR(){
+  await log('qr','frame_processor_start',[['→','engine','ML Kit BarcodeScanning',''],['→','thread','VisionCamera Worklet — native thread','g'],['→','fps','30fps · no JS/UI thread block','b']]);
+  await w(1200);
+  const scannedUPI='merchant@paytm'; const scannedAmt='150';
+  await log('qr','decode_success',[['→','latency','94ms (budget device)','g'],['→','vpa',scannedUPI,'b'],['→','amount',`₹${scannedAmt} (embedded in QR)`,'y'],['→','forward','→ USSDBuilder.ts via RN bridge','g']]);
+  S.upi=scannedUPI; S.amount=scannedAmt;
+  document.getElementById('upi-in').value=scannedUPI;
+  document.getElementById('amt-in').value=scannedAmt;
+  buildUssdPrev();
+  nav('send');
+  toast('send','✓ QR decoded: '+scannedUPI+' · ₹'+scannedAmt,'rgba(0,232,122,.1)','rgba(0,232,122,.25)','var(--green)');
+}
+
+// ═══════════════════════════════
+// HISTORY
+// ═══════════════════════════════
+function renderHist(){
+  const L=document.getElementById('hist-list'); L.innerHTML='';
+  S.txs.forEach(t=>{
+    const d=document.createElement('div'); d.className='txi';
+    d.innerHTML=`<div class="txi-av" style="background:${t.c}22;color:${t.c};">${t.i}</div><div class="txi-inf"><div class="txi-name">${t.nm}</div><div class="txi-time">${t.type==='s'?'↑ Sent':'↓ Received'} · ${t.time}</div></div><div class="txi-amt ${t.type==='s'?'s':'r'}">${t.type==='s'?'−':'+'}₹${t.amt.toFixed(2)}</div>`;
+    L.appendChild(d);
+  });
+  log('edge','load_history',[['→','source','encrypted SQLite local store',''],['→','records',`${S.txs.length} transactions`,'b'],['→','SmsParser','all refs cross-verified','g']]);
+}
+
+// ═══════════════════════════════
+// EXPENSE TRACKER
+// ═══════════════════════════════
+function renderExpCats(){
+  const C=document.getElementById('exp-cats'); if(!C)return; C.innerHTML='';
+  S.cats.forEach(c=>{
+    const d=document.createElement('div'); d.className='exp-cat';
+    d.innerHTML=`<div class="exp-cat-ico" style="background:${c.col}18;">${c.ico}</div><div class="exp-cat-inf"><div class="exp-cat-nm">${c.nm}</div><div class="exp-cat-bar-bg"><div class="exp-cat-bar" style="width:${c.pct}%;background:${c.col};"></div></div></div><div class="exp-cat-amt" style="color:${c.col};">₹${c.spent}</div>`;
+    C.appendChild(d);
+  });
+}
+
+function updateExpScreen(){
+  const pct=Math.round((S.spent/S.salary)*100);
+  document.getElementById('exp-pct-big').textContent=`${pct}%`;
+  document.getElementById('exp-pct-big').style.color=pct>70?'var(--red)':pct>50?'var(--yellow)':'var(--green)';
+  document.getElementById('exp-salary').textContent=`₹${S.salary.toLocaleString()}`;
+  document.getElementById('exp-spent-val').textContent=`₹${S.spent.toLocaleString()}`;
+  document.getElementById('exp-rem-val').textContent=`₹${(S.salary-S.spent).toLocaleString()}`;
+  // Update arc
+  const circumference=408.41;
+  const offset=circumference-(circumference*pct/100);
+  const arc=document.getElementById('exp-arc');
+  if(arc)arc.setAttribute('stroke-dashoffset',offset.toFixed(2));
+}
+
+function updateSalCard(){
+  const pct=Math.round((S.spent/S.salary)*100);
+  document.getElementById('sal-pct-label').textContent=`${pct}% spent`;
+  document.getElementById('sal-bar').style.width=`${Math.min(pct,100)}%`;
+  document.getElementById('sal-spent').textContent=`Spent: ₹${S.spent.toLocaleString()}`;
+  document.getElementById('sal-remain').textContent=`Left: ₹${(S.salary-S.spent).toLocaleString()}`;
+}
+
+function openSalModal(){
+  document.getElementById('sal-input').value=S.salary;
+  document.getElementById('spent-input').value=S.spent;
+  document.querySelector('.phone').style.position='relative';
+  document.getElementById('sal-modal').style.display='block';
+}
+function closeSalModal(e){document.getElementById('sal-modal').style.display='none';}
+function saveSalary(){
+  S.salary=parseFloat(document.getElementById('sal-input').value)||5000;
+  S.spent=parseFloat(document.getElementById('spent-input').value)||0;
+  document.getElementById('sal-modal').style.display='none';
+  updateSalCard();
+  updateExpScreen();
+  log('sal','salary_deduction_engine',[
+    ['→','salary',`₹${S.salary}`,'g'],
+    ['→','spent',`₹${S.spent}`,'y'],
+    ['→','remaining',`₹${S.salary-S.spent}`,'g'],
+    ['→','auto_deduct','tx history scan complete','b'],
+    ['→','pct',`${Math.round((S.spent/S.salary)*100)}% of budget used`,'y']
+  ]);
+  toast('home','💾 Budget updated · Auto-deduct enabled','rgba(255,180,0,.1)','rgba(255,180,0,.3)','var(--yellow)');
+}
+
+// ═══════════════════════════════
+// LANGUAGE SELECTOR
+// ═══════════════════════════════
+function renderLangs(){
+  const G=document.getElementById('lang-grid'); if(!G)return; G.innerHTML='';
+  LANGS.forEach(l=>{
+    const d=document.createElement('div');
+    d.className='lang-btn'+(l.en===S.lang?' sel':'');
+    d.innerHTML=`<div class="lang-native">${l.flag} ${l.native}</div><div class="lang-en">${l.en}</div>${l.en===S.lang?'<div class="lang-sel-ind">✓</div>':''}`;
+    d.onclick=()=>selectLang(l.en);
+    G.appendChild(d);
+  });
+}
+function selectLang(en){
+  S.lang=en;
+  renderLangs();
+  log('lang','language_selected',[['→','locale',en,'b'],['→','i18n','UI strings reloaded','g'],['→','RTL',en==='Urdu'?'enabled':'disabled','y']]);
+  toast('language',`🌍 Language set to ${en}!`,'rgba(159,122,234,.1)','rgba(159,122,234,.3)','var(--purple)');
+}
+
+// ═══════════════════════════════
+// QUICK ACTIONS
+// ═══════════════════════════════
+async function quickSend(){
+  S.upi='rahul@upi'; S.amount='200';
+  document.getElementById('upi-in').value='rahul@upi';
+  document.getElementById('amt-in').value='200';
+  buildUssdPrev();
+  nav('send');
+  await w(300); toPin();
+  await w(600); pinVal='284917'; updDots();
+  await w(500); okPin();
+}
+
+async function quickBal(){nav('account'); await w(300); doBalance();}
+
+init();
+</script>
+</body>
+</html>
